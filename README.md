@@ -2,10 +2,10 @@
 ## Overview
 We need you to extend the current ticketing system that will allow additional resources to be included.
 
-1. Implement RESTful endpoint(s) that will allow all Create, Read, Update, and Delete (CRUD) actions on a Ticket.
-2. Now amend the solution to allow the addition of Notes to a Ticket.
-3. Amend the solution to track any data manipulation and actions. Auditing could happen out of process.
-4. Create a Pull Request on github.
+- [ ] Implement RESTful endpoint(s) that will allow all Create, Read, Update, and Delete (CRUD) actions on a Ticket.
+- [ ] Now amend the solution to allow the addition of Notes to a Ticket.
+- [ ] Amend the solution to track any data manipulation and actions. Auditing could happen out of process.
+- [x] Create a Pull Request on github.
 
 ### Requirements
 - A note is created by a Person to log additional information against a ticket.
