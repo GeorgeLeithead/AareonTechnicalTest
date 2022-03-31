@@ -30,7 +30,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 // <summary>READ/GET all tickets.</summary>
-app.MapGet("/tickets", async (ApplicationContext db) => await db.Tickets.ToListAsync()
+app.MapGet("/tickets", async (ApplicationContext db) => await db.Tickets.Include(t => t.Notes).ToListAsync()
 ).Produces<List<ITicket>>(StatusCodes.Status200OK).WithName("GetAllTickets").WithTags("Getters");
 
 // <summary>CREATE/POST a new ticket.</summary>
@@ -61,7 +61,7 @@ app.MapPut("/tickets", async (int Id, string Content, int PersonId, [FromService
 
 // <summary>READ/GET a ticket by its unique identifier.</summary>
 app.MapGet("/tickets/{Id}", async ([FromServices] ApplicationContext db, int Id) =>
-		await db.Tickets.SingleOrDefaultAsync(t => t.Id == Id) is ITicket theTicket ? Results.Ok(theTicket) : Results.NotFound()
+		await db.Tickets.Include(t => t.Notes).SingleOrDefaultAsync(t => t.Id == Id) is ITicket theTicket ? Results.Ok(theTicket) : Results.NotFound()
 ).Produces<ITicket>(StatusCodes.Status200OK).WithName("GetTicketById").WithTags("Getters");
 
 // <summary>DELETE/DELETE a ticket by its unique identifier.</summary>
@@ -78,6 +78,11 @@ app.MapDelete("/tickets/{Id}", async ([FromServices] ApplicationContext db, int 
 		return Results.NoContent();
 	}
 ).Produces(StatusCodes.Status404NotFound).Produces(StatusCodes.Status204NoContent).WithName("DeleteTicketById").WithTags("Setters");
+
+// <summary>READ/GET all notes for a ticket.</summary>
+//app.MapGet("/tickets/{id}", async ([FromServices] ApplicationContext db, int Id) =>
+//	db.TicketNotes.Where(tn => tn.TicketId == Id).ToListAsync() is Task<List<ITicketNote>> theTicketNotes ? Results.Ok(theTicketNotes) : Results.NotFound()
+//).Produces<List<ITicketNote>>(StatusCodes.Status200OK);
 
 app.Logger.LogInformation("Starting AareonTechnicalTest {date}", DateTime.UtcNow);
 app.Run();

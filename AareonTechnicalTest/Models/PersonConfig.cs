@@ -12,6 +12,12 @@
 				{
 					entity.HasKey(e => e.Id);
 				});
+			modelBuilder.Entity<TicketNote>(
+				entity =>
+				{
+					entity.HasKey(e => e.Id);
+					entity.HasOne(e => e.Ticket).WithMany(e => e.Notes).HasForeignKey(e => e.PersonId).HasConstraintName("ForeignKey_TicketNote_Person");
+				});
 		}
 	}
 }

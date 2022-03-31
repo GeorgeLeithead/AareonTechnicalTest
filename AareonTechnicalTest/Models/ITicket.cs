@@ -9,6 +9,9 @@
 		/// <summary>Gets the Unique Ticket Identifier</summary>
 		int Id { get; }
 
+		/// <summary>Gets or sets the collection of notes for the ticket.</summary>
+		ICollection<TicketNote>? Notes { get; set; }
+
 		/// <summary>Gets or sets the Person identifier for ticket.</summary>
 		int PersonId { get; set; }
 	}

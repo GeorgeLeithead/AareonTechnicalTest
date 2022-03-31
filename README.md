@@ -3,7 +3,7 @@
 We need you to extend the current ticketing system that will allow additional resources to be included.
 
 - [x] Implement RESTful endpoint(s) that will allow all Create, Read, Update, and Delete (CRUD) actions on a Ticket.
-- [ ] Now amend the solution to allow the addition of Notes to a Ticket.
+- [x] Now amend the solution to allow the addition of Notes to a Ticket.
 - [ ] Amend the solution to track any data manipulation and actions. Auditing could happen out of process.
 - [x] Create a Pull Request on github.
 
@@ -58,3 +58,33 @@ Added to the solution is an EditorConfig file, used to enforce consistent coding
 
 ## Minimal API
 Upgraded project to use the minimal API framework. See [Minimal APIs overview](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-6.0) for details.
+
+## Entity Framework - Code First
+Taking the '[code first](https://entityframework.net/ef-code-first)' principal of Entity Framework, the column 'Note' was added to the 'Ticket' POCO with appropriate attributes.  Then using the Package Manager Console, a new migration was added and then the database was upgraded to include the changes.
+```cmd
+Add-Migration AddNoteToTicket
+Update-Database
+```
+I took the decision to make the column nullable and to have a maximum length.
+
+## JsonIgnore
+After adding a one-to-many reference for ticket to notes, there is a JSON referece loop created.  To avoid this, we ignore the reference loop properties by using ```[JsonIgnore]```.  See [How to ignore properties with System.Text.Json](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-ignore-properties?pivots=dotnet-6-0) for details.
+
+## Using Swagger
+Most documentation for using the API is detailed within Swagger.  To make it simpler, the following is an example of using the POST /tickets API and including more than one note.
+```json
+{
+  "content": "three",
+  "notes": [
+    {
+      "note": "one",
+      "person": 1
+    },
+    {
+      "note": "two",
+      "person": 2
+    }
+  ],
+  "personId": 1
+}
+```

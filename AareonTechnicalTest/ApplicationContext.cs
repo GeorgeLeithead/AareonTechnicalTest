@@ -20,6 +20,9 @@
 		/// <summary>Used to query and save instances of <see cref="Ticket"/>.</summary>
 		public virtual DbSet<Ticket> Tickets { get; set; } = null!;
 
+		/// <summary>Used to query and save instances of <see cref="TicketNote"/>.</summary>
+		public virtual DbSet<TicketNote> TicketNotes { get; set; } = null!;
+
 		/// <summary>Configuration of the database.</summary>
 		/// <param name="options">Configure the database connection and other options.</param>
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -33,6 +36,7 @@
 		{
 			PersonConfig.Configure(modelBuilder);
 			TicketConfig.Configure(modelBuilder);
+			TicketNoteConfig.Configure(modelBuilder);
 		}
 	}
 }
