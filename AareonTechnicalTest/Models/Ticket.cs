@@ -1,7 +1,7 @@
 ﻿namespace AareonTechnicalTest.Models
 {
 	/// <summary>Ticket POCO</summary>
-	public class Ticket
+	public class Ticket : ITicket
 	{
 		/// <summary>Gets the Unique Ticket Identifier</summary>
 		[Key]

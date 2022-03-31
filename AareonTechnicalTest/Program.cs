@@ -31,7 +31,7 @@ app.UseAuthorization();
 
 // <summary>READ/GET all tickets.</summary>
 app.MapGet("/tickets", async (ApplicationContext db) => await db.Tickets.ToListAsync()
-).Produces<List<Ticket>>(StatusCodes.Status200OK).WithName("GetAllTickets").WithTags("Getters");
+).Produces<List<ITicket>>(StatusCodes.Status200OK).WithName("GetAllTickets").WithTags("Getters");
 
 // <summary>CREATE/POST a new ticket.</summary>
 app.MapPost("/tickets", async ([FromBody] Ticket addTicket, [FromServices] ApplicationContext db, HttpResponse response) =>
@@ -40,13 +40,13 @@ app.MapPost("/tickets", async ([FromBody] Ticket addTicket, [FromServices] Appli
 		await db.SaveChangesAsync();
 		return Results.Created("tickets", addTicket);
 	}
-).Accepts<Ticket>("application/json").Produces<Ticket>(StatusCodes.Status201Created).WithName("AddNewTicket").WithTags("Setters");
+).Accepts<ITicket>("application/json").Produces<ITicket>(StatusCodes.Status201Created).WithName("AddNewTicket").WithTags("Setters");
 
 // <summary>UPDATE/PUT an existing ticket.</summary>
 // <remarks>Should not be able to update a ticket that does not exist.</remarks>
 app.MapPut("/tickets", async (int Id, string Content, int PersonId, [FromServices] ApplicationContext db, HttpResponse response) =>
 	{
-		global::AareonTechnicalTest.Models.Ticket? theTicket = db.Tickets.SingleOrDefault(t => t.Id == Id);
+		global::AareonTechnicalTest.Models.ITicket? theTicket = db.Tickets.SingleOrDefault(t => t.Id == Id);
 		if (theTicket == null)
 		{
 			return Results.NotFound();
@@ -57,17 +57,17 @@ app.MapPut("/tickets", async (int Id, string Content, int PersonId, [FromService
 		await db.SaveChangesAsync();
 		return Results.Created("/tickets", theTicket);
 	}
-).Produces<Ticket>(StatusCodes.Status201Created).Produces(StatusCodes.Status404NotFound).WithName("UpdateTicket").WithTags("Setters");
+).Produces<ITicket>(StatusCodes.Status201Created).Produces(StatusCodes.Status404NotFound).WithName("UpdateTicket").WithTags("Setters");
 
 // <summary>READ/GET a ticket by its unique identifier.</summary>
 app.MapGet("/tickets/{Id}", async ([FromServices] ApplicationContext db, int Id) =>
-		await db.Tickets.SingleOrDefaultAsync(t => t.Id == Id) is Ticket theTicket ? Results.Ok(theTicket) : Results.NotFound()
-).Produces<Ticket>(StatusCodes.Status200OK).WithName("GetTicketById").WithTags("Getters");
+		await db.Tickets.SingleOrDefaultAsync(t => t.Id == Id) is ITicket theTicket ? Results.Ok(theTicket) : Results.NotFound()
+).Produces<ITicket>(StatusCodes.Status200OK).WithName("GetTicketById").WithTags("Getters");
 
 // <summary>DELETE/DELETE a ticket by its unique identifier.</summary>
 app.MapDelete("/tickets/{Id}", async ([FromServices] ApplicationContext db, int Id) =>
 	{
-		global::AareonTechnicalTest.Models.Ticket? theTicket = db.Tickets.SingleOrDefault(t => t.Id == Id);
+		global::AareonTechnicalTest.Models.ITicket? theTicket = db.Tickets.SingleOrDefault(t => t.Id == Id);
 		if (theTicket == null)
 		{
 			return Results.NotFound();

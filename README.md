@@ -19,7 +19,6 @@ These tasks should take no longer than 4 hours
 ### Before looking at the technical test and requirements
 I had the following thoughts and questions before seeing the actual techical test and requirements:
 
-- Whilst I am not averse to performing Software Engineer technical tests, I do have to ask if similar tests are required for other roles 
 - What is the expected experience level of the Software Engineer(s) that will be responsible for support and maintenance going forward?
   - I personally feel that this has a direct impact of the up-front efforts (and thus costs) that should be undertaken with regards to code complexity and internal documentation.  This also has a bearing on how complicated and abstracted the solution needs to be.
 - What is the expected lifespan of this solution?  Technology moved forward at an ever increasing pace, and technologies such as .NET Core 3.1 has an end-of-life support on 03/12/2022.  As such what is the plans going forward for any such solution in terms of support and maintenance when such end-of-life is approaching?
