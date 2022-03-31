@@ -50,3 +50,12 @@ The solution is based on .NET 5.0, which has an end-of-life support date of May 
 
 ## Added GitHub Actions
 Added a dotnet.yml to build and run any tests when the code is pulled to GitHub.
+
+## Global Usings
+Added in C# 10 Implicit using directives.  The intention is to simplify and lighten code, by declaring only once a using keyword on a specific namespace on a project.  See [Implicit using directives](https://docs.microsoft.com/en-us/dotnet/core/project-sdk/overview#implicit-using-directives) for details.
+
+## Editor Config
+Added to the solution is an EditorConfig file, used to enforce consistent coding styles and standards for everyone that works in the code base. See [Create portable, custom editor settings with EditorConfig](https://docs.microsoft.com/en-us/visualstudio/ide/create-portable-custom-editor-options?view=vs-2022) for details.
+
+## Minimal API
+Upgraded project to use the minimal API framework. See [Minimal APIs overview](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-6.0) for details.
