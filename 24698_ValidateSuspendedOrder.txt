@@ -1,0 +1,44 @@
+POST /api/V1/properties/BLWHALDRD0233/orders HTTP/1.1
+CompanyCode: BPI
+LedgerId: PL1
+WorkgroupId: DIRECTOR
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IkIyRDAxRUU1M0RBRTdGNTI0MTBGMjQxRkRBMzc4OTMxIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2MzgzMjExODUsImV4cCI6MTYzODMyNDc4NSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NDQzMDciLCJhdWQiOiJxbGFwaSIsImlkcCI6ImxvY2FsIiwiY2xpZW50X2lkIjoiVjVTcGEiLCJzdWIiOiJKQUNLRyIsIm5hbWUiOiJEb25uYSBEYXZpZXMiLCJSb2xlIjoiU3lzdGVtQWRtaW4iLCJnaXZlbl9uYW1lIjoiRG9ubmEgRGF2aWVzIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiRG9ubmEgRGF2aWVzIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInFsYXBpIiwib2ZmbGluZV9hY2Nlc3MiXX0.lotO0Fgn-TjWgNXrJC9KHToUWKkQ5K8j4oU3kzyr_f1v9Pzowf4hfeSKYWcLRq4qD2ei5q8ZeJfzhDpSjRWHZCp83PbhAV0ehJUpUbvvD2Jh7G-eoVfwXIup8WA9lQ0l0PqZfcORJJI8yj9ydUtcEjJEgIVsiU6tAL4HF6PINpDa60KLbNrTxIuchYt8BhOSXuPC9IG8-Jhwx5r2zlBHgzNNgXB0wY9xFn8JoiIsFoTHFnaV9d2NP_oz_024O-kWpMFgrc_m9JONZsK0BylG6Mtp1lN0e-KyYXnWz2V1YwJEuxQWmzChNQRiBGW4nMyIOePnYvkxPYQJZzM1fr9Kfg
+Content-Type: application/json
+User-Agent: PostmanRuntime/7.28.4
+Accept: */*
+Postman-Token: 2b80a323-6cac-495a-ad4d-6404d42fc95f
+Host: localhost:44377
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Length: 323
+ 
+{
+"description": "test description",
+"creation": "2021-11-11T10:49:24.429Z",
+"workType": "RECH",
+"tradeCode": "CARP",
+"contractor": "REP001",
+"scheduleOfRatesCode": 1,
+"priorityCode": "5DAY",
+"items": [
+{
+"itemCode": "KIT_NEW_DA",
+"quantity": 1
+}
+],
+"clientId": 5111
+}
+ 
+HTTP/1.1 200 OK
+Date: Wed, 01 Dec 2021 01:52:50 GMT
+Content-Type: application/json; charset=utf-8
+Server: Kestrel
+Content-Length: 108
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Content-Security-Policy: default-src 'self';img-src data: https:;object-src 'none'; script-src https://stackpath.bootstrapcdn.com/ 'self' 'unsafe-inline';style-src https://stackpath.bootstrapcdn.com/ 'self' 'unsafe-inline'; upgrade-insecure-requests;
+X-Content-Security-Policy: default-src 'self';img-src data: https:;object-src 'none'; script-src https://stackpath.bootstrapcdn.com/ 'self' 'unsafe-inline';style-src https://stackpath.bootstrapcdn.com/ 'self' 'unsafe-inline'; upgrade-insecure-requests;
+Referrer-Policy: no-referrer
+api-supported-versions: 1.0, 5.0
+ 
+{"CreatedOrderNumber":2342,"StandardMinuteValue":30.0,"TargetCompletionDate":"2021-12-08T00:00:00.0000000Z"}
