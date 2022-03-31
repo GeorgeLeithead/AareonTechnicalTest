@@ -1,7 +1,10 @@
 ﻿namespace AareonTechnicalTest.Migrations
 {
+	/// <summary>Initial create of EF Migration model.</summary>
 	public partial class InitialCreate : Migration
 	{
+		/// <summary>Upgrade EF model.</summary>
+		/// <param name="migrationBuilder">Migration builder.</param>
 		protected override void Up(MigrationBuilder migrationBuilder)
 		{
 			migrationBuilder.CreateTable(
@@ -34,6 +37,8 @@
 				});
 		}
 
+		/// <summary>Downgrade EF model.</summary>
+		/// <param name="migrationBuilder">Migration builder.</param>
 		protected override void Down(MigrationBuilder migrationBuilder)
 		{
 			migrationBuilder.DropTable(

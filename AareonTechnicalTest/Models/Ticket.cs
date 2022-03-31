@@ -3,14 +3,14 @@
 	/// <summary>Ticket POCO</summary>
 	public class Ticket
 	{
-		/// <summary>Unique Identifier</summary>
+		/// <summary>Gets the Unique Ticket Identifier</summary>
 		[Key]
 		public int Id { get; }
 
-		/// <summary>Content of ticket.</summary>
+		/// <summary>Gets or sets the Content of a ticket.</summary>
 		public string? Content { get; set; }
 
-		/// <summary>Person identifier for ticket.</summary>
+		/// <summary>Gets or sets the Person identifier for ticket.</summary>
 		public int PersonId { get; set; }
 	}
 }
