@@ -44,11 +44,21 @@ I had the following thoughts and questions before seeing the actual techical tes
   - (This may depend on the test, which I haven’t seen yet) What level of security is required for the API service to interact with the SQL data back-end?  Does the API service interact with SQL using a service account and also using (more secure) stored-procedures?
 
 # Reviewer Updates
+## GitHub Repository
+The main branch for this GitHub repository can be found here: [Main Branch](https://github.com/GeorgeLeithead/AareonTechnicalTest).
+
+As the test was supplied in a ZIP format, the ZIP was extracted localy and after adding a few basic Git files, was PUSHed to GitHub.  See the [repository history](https://github.com/GeorgeLeithead/AareonTechnicalTest/tree/252229e20484372179cbdc380621cb33536a6d2d) for the initial files from the ZIP.
+
+Being the only person contributing to the repository, I took the decision to work directly on the MAIN branch.  Normally when working with others, a branch would be created for the amendments and mreged with main when appropriate.
+### GitHub Actions
+#### Build
+Added a dotnet.yml to build and run any tests when the code is pulled to GitHub.
+#### Code Quality
+Added a Code Quality build action, to automate the performance of standard code quality checks.
+
 ## Upgrade .NET to LTS
 The solution is based on .NET 5.0, which has an end-of-life support date of May 8th 2022 See [Microsoft .NET and .NET Core - Microsoft Lifecycle](https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core) for details.
 
-## Added GitHub Actions
-Added a dotnet.yml to build and run any tests when the code is pulled to GitHub.
 
 ## Global Usings
 Added in C# 10 Implicit using directives.  The intention is to simplify and lighten code, by declaring only once a using keyword on a specific namespace on a project.  See [Implicit using directives](https://docs.microsoft.com/en-us/dotnet/core/project-sdk/overview#implicit-using-directives) for details.
