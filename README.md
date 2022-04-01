@@ -29,17 +29,17 @@ I had the following thoughts and questions before seeing the actual techical tes
 - Would the service be required to scale up to meet needs?
   - Automatic up and down scaling of services  by using services such as Azure API management instance to add and remove units can benefit the service during peak times.
 - Would the service be required to scale out to meet localised needs?
-  - Multi-region deployment across a number of Azure regions would be of benefit if the service is used in such regions, from reading the ëWelcomeí section of the Recruitment Pack, I can see that the parent company ìAereal Bank Groupî operates in a total of 28 countries.
+  - Multi-region deployment across a number of Azure regions would be of benefit if the service is used in such regions, from reading the ‚ÄòWelcome‚Äô section of the Recruitment Pack, I can see that the parent company ‚ÄúAereal Bank Group‚Äù operates in a total of 28 countries.
 - Is the service required to support languages other than en-GB?
-  - I feel that whilst API end-points do not ënecessarilyí need to change to provide multi-language, they can be of benefit.  Multi-language if required would need to be handled thought the entirety of the solution, from front-end, user language detection, to data storage and information retrieval (if the user is en-GB, should any data returned include other languages such as uk-UA?
+  - I feel that whilst API end-points do not ‚Äònecessarily‚Äô need to change to provide multi-language, they can be of benefit.  Multi-language if required would need to be handled thought the entirety of the solution, from front-end, user language detection, to data storage and information retrieval (if the user is en-GB, should any data returned include other languages such as uk-UA?
 - Has the client considered implementing the service in a manner that provides a cross-platform solution, such as both Web and Mobile?
   - I personally feel that the use and acceptance of mobile applications is starting to out-weigh traditional web based applications.  Users are most likely to have available a mobile device, rather than a traditional desktop/laptop.  Implementing a solution such as .NET 6 with MAUI could provide a multi-platform app UI across iOS, Android, macOS and Windows by possibly following the Progressive Web Application route.
 - Logging is indicated as being used, but there is no definition as to what has to be logged and why, what are the logging requirements?
   - Logging is only as good as the data logged and the tools already in place to turn the data into meaningful and timely information.  I personally feel that often logging is over-done and this tends to cause so much noisy data, that the true data that is lost.  Worse, when there is insufficient logging in place, the truly important logging data is missed.
-- There is a ëhintí towards the service requires authentication and authorisation.
+- There is a ‚Äòhint‚Äô towards the service requires authentication and authorisation.
   - I think that this could determine the kind of authentication and authorisation that could be implemented.  Such as Azure AD, Azure AD B2C (External Identities) or a custom JWT based authentication.
 - Security is often only tagged onto a project as a side-note or by-product.  If required, are there details of what authorisation each service end-point should have in place?
-  - In my experience, security is often just ëassumedí and never truly defined.  As such, it is often the diligent Software Engineer that takes authentication and authorisation into account, and not always to a successful end.
+  - In my experience, security is often just ‚Äòassumed‚Äô and never truly defined.  As such, it is often the diligent Software Engineer that takes authentication and authorisation into account, and not always to a successful end.
 
 # Reviewer Updates
 ## GitHub Repository
@@ -52,7 +52,7 @@ Being the only person contributing to the repository, I took the decision to wor
 #### Build
 Added a dotnet.yml to build and run any tests when the code is pulled to GitHub.
 #### Code Quality
-Added a Code Quality build action, to automate the performance of standard code quality checks.
+Added a Code Quality build action, to automate the performance of standard code quality checks.  There are a few issues raised by this, and are have been left in to demonstrate it's functionality.
 
 ## Upgrade .NET to LTS
 The solution is based on .NET 5.0, which has an end-of-life support date of May 8th 2022 See [Microsoft .NET and .NET Core - Microsoft Lifecycle](https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core) for details.
