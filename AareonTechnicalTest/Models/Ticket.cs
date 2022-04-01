@@ -17,6 +17,7 @@
 		/// <summary>Gets or sets the collection of notes for the ticket.</summary>
 		[DisplayName("Ticket Notes")]
 		[Description("Notes taken against the ticket")]
+		[JsonIgnore]
 		public virtual ICollection<TicketNote>? Notes { get; set; }
 
 		/// <summary>Gets or sets the Person identifier for ticket.</summary>

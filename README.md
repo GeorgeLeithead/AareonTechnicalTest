@@ -32,16 +32,14 @@ I had the following thoughts and questions before seeing the actual techical tes
   - Multi-region deployment across a number of Azure regions would be of benefit if the service is used in such regions, from reading the ‘Welcome’ section of the Recruitment Pack, I can see that the parent company “Aereal Bank Group” operates in a total of 28 countries.
 - Is the service required to support languages other than en-GB?
   - I feel that whilst API end-points do not ‘necessarily’ need to change to provide multi-language, they can be of benefit.  Multi-language if required would need to be handled thought the entirety of the solution, from front-end, user language detection, to data storage and information retrieval (if the user is en-GB, should any data returned include other languages such as uk-UA?
-- (This may depend on the test, which I haven’t seen yet) In the positives and negatives listed below, there is a ‘hint’ towards the service requiring authentication and authorisation.  Is the service made available to the general public, internally, and/or partners?
-  - I think that this could determine the kind of authentication and authorisation that could be implemented.  Such as Azure AD, Azure AD B2C (External Identities) or a custom JWT based authentication.
-- (This may depend on the test, which I haven’t seen yet) I know the contract is for a “backend Developer”, but the information listed hints that the client is targeting “web-based applications”.  However, has the client considered implementing the service in a manner that provides a cross-platform solution, such as both Web and Mobile?
+- Has the client considered implementing the service in a manner that provides a cross-platform solution, such as both Web and Mobile?
   - I personally feel that the use and acceptance of mobile applications is starting to out-weigh traditional web based applications.  Users are most likely to have available a mobile device, rather than a traditional desktop/laptop.  Implementing a solution such as .NET 6 with MAUI could provide a multi-platform app UI across iOS, Android, macOS and Windows by possibly following the Progressive Web Application route.
 - Logging is indicated as being used, but there is no definition as to what has to be logged and why, what are the logging requirements?
   - Logging is only as good as the data logged and the tools already in place to turn the data into meaningful and timely information.  I personally feel that often logging is over-done and this tends to cause so much noisy data, that the true data that is lost.  Worse, when there is insufficient logging in place, the truly important logging data is missed.
-- I assume that the client requires that Swagger is made available in the implementation?
+- There is a ‘hint’ towards the service requires authentication and authorisation.
+  - I think that this could determine the kind of authentication and authorisation that could be implemented.  Such as Azure AD, Azure AD B2C (External Identities) or a custom JWT based authentication.
 - Security is often only tagged onto a project as a side-note or by-product.  If required, are there details of what authorisation each service end-point should have in place?
   - In my experience, security is often just ‘assumed’ and never truly defined.  As such, it is often the diligent Software Engineer that takes authentication and authorisation into account, and not always to a successful end.
-  - (This may depend on the test, which I haven’t seen yet) What level of security is required for the API service to interact with the SQL data back-end?  Does the API service interact with SQL using a service account and also using (more secure) stored-procedures?
 
 # Reviewer Updates
 ## GitHub Repository
@@ -80,21 +78,7 @@ I took the decision to make the column nullable and to have a maximum length.
 ## JsonIgnore
 After adding a one-to-many reference for ticket to notes, there is a JSON referece loop created.  To avoid this, we ignore the reference loop properties by using ```[JsonIgnore]```.  See [How to ignore properties with System.Text.Json](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-ignore-properties?pivots=dotnet-6-0) for details.
 
-## Using Swagger
-Most documentation for using the API is detailed within Swagger.  To make it simpler, the following is an example of using the POST /tickets API and including more than one note.
-```json
-{
-  "content": "three",
-  "notes": [
-    {
-      "note": "one",
-      "person": 1
-    },
-    {
-      "note": "two",
-      "person": 2
-    }
-  ],
-  "personId": 1
-}
-```
+## View-Models
+In order to return and accept records it 'may' be necessary to provide view-models for end-points where necessary.  This would allow the JSON to be richer, without compromising the base data models.
+
+For example, for the 'GetTicketNoteById', ideally the JSON would return the Id, Note and also the Person object.
