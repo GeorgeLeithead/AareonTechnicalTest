@@ -82,3 +82,9 @@ After adding a one-to-many reference for ticket to notes, there is a JSON refere
 In order to return and accept records it 'may' be necessary to provide view-models for end-points where necessary.  This would allow the JSON to be richer, without compromising the base data models.
 
 For example, for the 'GetTicketNoteById', ideally the JSON would return the Id, Note and also the Person object.
+
+## PostRejection branch
+A new branch which implements the 'domain/module-driven' approach.  It moves from the traditional folder structure where the application is grouped by its domain.  The different domains of the application are organised in module (or feature) folders.
+
+### The structure of a module
+The benefits of this approach makes that every module becomes self-contained.  Simple modules can have a simple setup, while a module has the flexibility to deviate from the "default" setup for more complex modules.  A domain-based structure groups files and folders by their (sub)domain, this gives us a better understanding of the application and makes it easier to navigate through the application.

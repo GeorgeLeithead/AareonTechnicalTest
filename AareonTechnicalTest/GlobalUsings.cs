@@ -1,5 +1,8 @@
 ﻿global using AareonTechnicalTest;
 global using AareonTechnicalTest.Models;
+global using AareonTechnicalTest.Modules.Persons.Adapters;
+global using AareonTechnicalTest.Modules.Persons.EndPoints;
+global using AareonTechnicalTest.Modules.Persons.Ports;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Infrastructure;

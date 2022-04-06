@@ -1,3 +1,5 @@
+using AareonTechnicalTest.Modules;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,8 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ApplicationContext>(c => c.UseSqlite());
+builder.Services.RegisterModules();
+builder.Services.AddScoped<ILogger, Logger<Program>>();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -26,6 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapEndpoints();
 app.UseRouting();
 app.UseAuthorization();
 
