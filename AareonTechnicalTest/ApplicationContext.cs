@@ -23,12 +23,15 @@
 		/// <summary>Used to query and save instances of <see cref="TicketNote"/>.</summary>
 		public virtual DbSet<TicketNote> TicketNotes { get; set; } = null!;
 
-		/// <summary>Configuration of the database.</summary>
-		/// <param name="options">Configure the database connection and other options.</param>
-		protected override void OnConfiguring(DbContextOptionsBuilder options)
-		{
-			options.UseSqlite($"Data Source={DatabasePath}");
-		}
+		///// <summary>Configuration of the database.</summary>
+		///// <param name="options">Configure the database connection and other options.</param>
+		//protected override void OnConfiguring(DbContextOptionsBuilder options)
+		//{
+		//	if (!DatabasePath.Contains(".Tests\\"))
+		//	{
+		//		options.UseSqlite($"Filename={DatabasePath}");
+		//	}
+		//}
 
 		/// <summary>Further configure the model.</summary>
 		/// <param name="modelBuilder">Model the defines the shape of entities, their relationships and how they map to the database.</param>

@@ -6,7 +6,12 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<ApplicationContext>(c => c.UseSqlite());
+builder.Services.AddDbContext<ApplicationContext>(c =>
+{
+	string? envDir = Environment.CurrentDirectory;
+	string DatabasePath = $"{envDir}{Path.DirectorySeparatorChar}Ticketing.db";
+	c.UseSqlite($"Filename={DatabasePath}");
+});
 builder.Services.RegisterModules();
 builder.Services.AddScoped<ILogger, Logger<Program>>();
 
@@ -18,6 +23,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 WebApplication app = builder.Build();
+
+//await EnsureDb(app.Services, app.Logger);
 
 app.UseSwagger();
 // Configure the HTTP request pipeline.
@@ -198,3 +205,17 @@ app.MapDelete("/tickets/Notes/{Id}", async ([FromServices] ApplicationContext db
 
 app.Logger.LogInformation("Starting AareonTechnicalTest {date}", DateTime.UtcNow);
 app.Run();
+
+async Task EnsureDb(IServiceProvider services, ILogger logger)
+{
+	using ApplicationContext? db = services.CreateScope().ServiceProvider.GetRequiredService<ApplicationContext>();
+	if (db.Database.IsRelational())
+	{
+		logger.LogInformation("Ensuring database exists and is up to date");
+		await db.Database.MigrateAsync();
+	}
+}
+
+/// <summary>Program class.</summary>
+/// <remarks>Make the implicit Program class public so test projects can access it.</remarks>
+public partial class Program { }

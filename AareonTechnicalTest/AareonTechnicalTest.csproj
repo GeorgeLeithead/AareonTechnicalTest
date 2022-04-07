@@ -5,6 +5,7 @@
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <Nullable>enable</Nullable>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <RootNamespace>AareonTechnicalTest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,5 +20,9 @@
 	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
+	
+	<ItemGroup>
+		<InternalsVisibleTo Include="AareonTechnicalTest.Tests" />
+	</ItemGroup>
 
 </Project>
