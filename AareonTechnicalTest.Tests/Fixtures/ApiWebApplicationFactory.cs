@@ -6,7 +6,7 @@
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.Extensions.Hosting;
 
-	internal class ApiWebApplicationFactory : WebApplicationFactory<Program>
+	public class ApiWebApplicationFactory : WebApplicationFactory<Program>
 	{
 		private readonly string _environment;
 		private readonly string _testDatabase;
