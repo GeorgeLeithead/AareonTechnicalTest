@@ -13,10 +13,10 @@
 	public class PersonsTests
 	{
 		[Fact]
-		public async Task Valid_Get_GetAllPersons_Response()
+		public async Task Get_WhenCalled_HttpStatusCodeOk()
 		{
 			// Arrange
-			await using ApiWebApplicationFactory application = new("Development");
+			await using ApiWebApplicationFactory application = new("Development", nameof(Get_WhenCalled_HttpStatusCodeOk));
 			using (IServiceScope scope = application.Services.CreateScope())
 			{
 				IServiceProvider provider = scope.ServiceProvider;
@@ -34,10 +34,10 @@
 		}
 
 		[Fact]
-		public async Task Valid_Get_GetAllPersons_Empty()
+		public async Task Get_WhenCalled_Empty()
 		{
 			// Arrange
-			await using ApiWebApplicationFactory application = new("Development");
+			await using ApiWebApplicationFactory application = new("Development", nameof(Get_WhenCalled_Empty));
 			using (IServiceScope scope = application.Services.CreateScope())
 			{
 				IServiceProvider provider = scope.ServiceProvider;
@@ -55,10 +55,10 @@
 		}
 
 		[Fact]
-		public async Task Valid_Get_GetAllPersons_Array()
+		public async Task Get_WhenCalled_ReturnsAllItems()
 		{
 			// Arrange
-			await using ApiWebApplicationFactory application = new("Development");
+			await using ApiWebApplicationFactory application = new("Development", nameof(Get_WhenCalled_ReturnsAllItems));
 			using (IServiceScope scope = application.Services.CreateScope())
 			{
 				IServiceProvider provider = scope.ServiceProvider;
@@ -83,10 +83,10 @@
 		}
 
 		[Fact]
-		public async Task Valid_Post_PostPerson()
+		public async Task Add_ValidObjectPassed_ReturnedResponseHasCreatedItem()
 		{
 			// Arrange
-			await using ApiWebApplicationFactory application = new("Development");
+			await using ApiWebApplicationFactory application = new("Development", nameof(Add_ValidObjectPassed_ReturnedResponseHasCreatedItem));
 			using (IServiceScope scope = application.Services.CreateScope())
 			{
 				IServiceProvider provider = scope.ServiceProvider;
@@ -106,15 +106,32 @@
 				);
 
 			// Assert
-			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-			// Act
-			List<Person> responseCheckPost = await client.GetFromJsonAsync<List<Person>>("/person");
-
-			// Assert
-			Assert.Single(responseCheckPost);
+			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 		}
 
+		[Fact]
+		public async Task GetById_UnknownIdPassed_ReturnsNotFoundResult()
+		{
+			// Arrange
+			await using ApiWebApplicationFactory application = new("Development", nameof(GetById_UnknownIdPassed_ReturnsNotFoundResult));
+			using (IServiceScope scope = application.Services.CreateScope())
+			{
+				IServiceProvider provider = scope.ServiceProvider;
+				using ApplicationContext notesDbContext = provider.GetRequiredService<ApplicationContext>();
+				await notesDbContext.Database.EnsureDeletedAsync();
+				await notesDbContext.Database.EnsureCreatedAsync();
+				await notesDbContext.AddRangeAsync(NotEmpty_GetAllPersonsData.DataPerson);
+				await notesDbContext.SaveChangesAsync();
+			}
+
+			// Act
+			HttpClient client = application.CreateClient();
+			int id = 99;
+			HttpResponseMessage? response = await client.GetAsync($"/person/{id}");
+
+			// Assert
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+		}
 	}
 
 	public static class NotEmpty_GetAllPersonsData

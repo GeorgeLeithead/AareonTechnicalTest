@@ -21,7 +21,7 @@
 			else
 			{
 				logger.LogInformation("[Modules.Persons.AddPerson.Handler] Added Person with id:={id} @{LogTime}", newPerson.Id, DateTimeOffset.UtcNow);
-				return Results.Ok(newPerson);
+				return Results.Created("/person/" + newPerson.Id, newPerson);
 			}
 		}
 	}

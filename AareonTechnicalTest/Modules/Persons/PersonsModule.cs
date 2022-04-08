@@ -38,7 +38,7 @@
 				.AllowAnonymous();
 			endpoints.MapPost("/person", AddPerson.Handler)
 				.Accepts<IPerson>("application/json")
-				.Produces<IPerson>(StatusCodes.Status200OK)
+				.Produces<IPerson>(StatusCodes.Status201Created)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("AddPerson")
 				.WithTags("Person")

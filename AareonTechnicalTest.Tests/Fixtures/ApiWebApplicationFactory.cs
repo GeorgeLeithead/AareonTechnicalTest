@@ -9,10 +9,12 @@
 	internal class ApiWebApplicationFactory : WebApplicationFactory<Program>
 	{
 		private readonly string _environment;
+		private readonly string _testDatabase;
 
-		public ApiWebApplicationFactory(string environment = "Development")
+		public ApiWebApplicationFactory(string environment = "Development", string testDatabase = "Testing")
 		{
 			_environment = environment;
+			_testDatabase = testDatabase;
 		}
 
 		protected override IHost CreateHost(IHostBuilder builder)
@@ -23,7 +25,7 @@
 			// Add mock/test services to the builder here
 			builder.ConfigureServices(services =>
 			{
-				ServiceDescriptor? context = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(DbContext));
+				ServiceDescriptor? context = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(DbContextOptions<ApplicationContext>));
 				if (context != null)
 				{
 					services.Remove(context);
@@ -35,7 +37,7 @@
 					//}
 				}
 
-				services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase("Testing", root));
+				services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase(_testDatabase, root));
 				//services.AddScoped(sp =>
 				//{
 				//	// Replace SQLite with in-memory database for tests
