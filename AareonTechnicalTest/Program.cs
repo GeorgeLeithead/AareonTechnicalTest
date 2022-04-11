@@ -24,8 +24,6 @@ builder.Services.AddSwaggerGen(c =>
 
 WebApplication app = builder.Build();
 
-//await EnsureDb(app.Services, app.Logger);
-
 app.UseSwagger();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,72 +39,72 @@ app.MapEndpoints();
 app.UseRouting();
 app.UseAuthorization();
 
-// <summary>READ/GET all tickets.</summary>
-app.MapGet("/tickets", async (ApplicationContext db) => await db.Tickets.Include(t => t.Notes).ToListAsync())
-	.Produces<List<ITicket>>(StatusCodes.Status200OK)
-	.WithName("GetAllTickets")
-	.WithTags("TicketGetters")
-	.AllowAnonymous();
+//// <summary>READ/GET all tickets.</summary>
+//app.MapGet("/tickets", async (ApplicationContext db) => await db.Tickets.Include(t => t.Notes).ToListAsync())
+//	.Produces<List<ITicket>>(StatusCodes.Status200OK)
+//	.WithName("GetAllTickets")
+//	.WithTags("TicketGetters")
+//	.AllowAnonymous();
 
-// <summary>CREATE/POST a new ticket.</summary>
-app.MapPost("/tickets", async ([FromBody] Ticket addTicket, [FromServices] ApplicationContext db, HttpResponse response) =>
-	{
-		db.Tickets.Add(addTicket);
-		await db.SaveChangesAsync();
-		return Results.Created("tickets", addTicket);
-	})
-	.Accepts<ITicket>("application/json")
-	.Produces<ITicket>(StatusCodes.Status201Created)
-	.WithName("AddNewTicket")
-	.WithTags("TicketSetters")
-	.AllowAnonymous();
+//// <summary>CREATE/POST a new ticket.</summary>
+//app.MapPost("/tickets", async ([FromBody] Ticket addTicket, [FromServices] ApplicationContext db, HttpResponse response) =>
+//	{
+//		db.Tickets.Add(addTicket);
+//		await db.SaveChangesAsync();
+//		return Results.Created("tickets", addTicket);
+//	})
+//	.Accepts<ITicket>("application/json")
+//	.Produces<ITicket>(StatusCodes.Status201Created)
+//	.WithName("AddNewTicket")
+//	.WithTags("TicketSetters")
+//	.AllowAnonymous();
 
-// <summary>UPDATE/PUT an existing ticket.</summary>
-// <remarks>Should not be able to update a ticket that does not exist.</remarks>
-app.MapPut("/tickets", async (int Id, string Content, int PersonId, [FromServices] ApplicationContext db, HttpResponse response) =>
-	{
-		ITicket? theTicket = db.Tickets.Include(t => t.Notes).SingleOrDefault(t => t.Id == Id);
-		if (theTicket == null)
-		{
-			return Results.NotFound();
-		}
+//// <summary>UPDATE/PUT an existing ticket.</summary>
+//// <remarks>Should not be able to update a ticket that does not exist.</remarks>
+//app.MapPut("/tickets", async (int Id, string Content, int PersonId, [FromServices] ApplicationContext db, HttpResponse response) =>
+//	{
+//		ITicket? theTicket = db.Tickets.Include(t => t.Notes).SingleOrDefault(t => t.Id == Id);
+//		if (theTicket == null)
+//		{
+//			return Results.NotFound();
+//		}
 
-		theTicket.Content = Content;
-		theTicket.PersonId = PersonId;
-		theTicket.Notes = theTicket.Notes;
-		await db.SaveChangesAsync();
-		return Results.Created("/tickets", theTicket);
-	})
-	.Produces<ITicket>(StatusCodes.Status201Created)
-	.Produces(StatusCodes.Status404NotFound)
-	.WithName("UpdateTicket")
-	.WithTags("TicketSetters")
-	.AllowAnonymous();
+//		theTicket.Content = Content;
+//		theTicket.PersonId = PersonId;
+//		theTicket.Notes = theTicket.Notes;
+//		await db.SaveChangesAsync();
+//		return Results.Created("/tickets", theTicket);
+//	})
+//	.Produces<ITicket>(StatusCodes.Status201Created)
+//	.Produces(StatusCodes.Status404NotFound)
+//	.WithName("UpdateTicket")
+//	.WithTags("TicketSetters")
+//	.AllowAnonymous();
 
-// <summary>READ/GET a ticket by its unique identifier.</summary>
-app.MapGet("/tickets/{Id}", async ([FromServices] ApplicationContext db, int Id) => await db.Tickets.Include(t => t.Notes).SingleOrDefaultAsync(t => t.Id == Id) is ITicket theTicket ? Results.Ok(theTicket) : Results.NotFound())
-	.Produces<ITicket>(StatusCodes.Status200OK)
-	.WithName("GetTicketById")
-	.WithTags("TicketGetters");
+//// <summary>READ/GET a ticket by its unique identifier.</summary>
+//app.MapGet("/tickets/{Id}", async ([FromServices] ApplicationContext db, int Id) => await db.Tickets.Include(t => t.Notes).SingleOrDefaultAsync(t => t.Id == Id) is ITicket theTicket ? Results.Ok(theTicket) : Results.NotFound())
+//	.Produces<ITicket>(StatusCodes.Status200OK)
+//	.WithName("GetTicketById")
+//	.WithTags("TicketGetters");
 
-// <summary>DELETE/DELETE a ticket by its unique identifier.</summary>
-app.MapDelete("/tickets/{Id}", async ([FromServices] ApplicationContext db, int Id) =>
-	{
-		ITicket? theTicket = db.Tickets.SingleOrDefault(t => t.Id == Id);
-		if (theTicket == null)
-		{
-			return Results.NotFound();
-		}
+//// <summary>DELETE/DELETE a ticket by its unique identifier.</summary>
+//app.MapDelete("/tickets/{Id}", async ([FromServices] ApplicationContext db, int Id) =>
+//	{
+//		ITicket? theTicket = db.Tickets.SingleOrDefault(t => t.Id == Id);
+//		if (theTicket == null)
+//		{
+//			return Results.NotFound();
+//		}
 
-		db.Remove(theTicket);
-		await db.SaveChangesAsync();
-		return Results.NoContent();
-	})
-	.Produces(StatusCodes.Status404NotFound)
-	.Produces(StatusCodes.Status204NoContent)
-	.WithName("DeleteTicketById")
-	.WithTags("TicketSetters")
-	.AllowAnonymous();
+//		db.Remove(theTicket);
+//		await db.SaveChangesAsync();
+//		return Results.NoContent();
+//	})
+//	.Produces(StatusCodes.Status404NotFound)
+//	.Produces(StatusCodes.Status204NoContent)
+//	.WithName("DeleteTicketById")
+//	.WithTags("TicketSetters")
+//	.AllowAnonymous();
 
 // <summary>READ/GET all notes for a ticket.</summary>
 app.MapGet("/tickets/{ticketId}/Notes", async ([FromServices] ApplicationContext db, int ticketId) =>
@@ -205,16 +203,6 @@ app.MapDelete("/tickets/Notes/{Id}", async ([FromServices] ApplicationContext db
 
 app.Logger.LogInformation("Starting AareonTechnicalTest {date}", DateTime.UtcNow);
 app.Run();
-
-async Task EnsureDb(IServiceProvider services, ILogger logger)
-{
-	using ApplicationContext? db = services.CreateScope().ServiceProvider.GetRequiredService<ApplicationContext>();
-	if (db.Database.IsRelational())
-	{
-		logger.LogInformation("Ensuring database exists and is up to date");
-		await db.Database.MigrateAsync();
-	}
-}
 
 /// <summary>Program class.</summary>
 /// <remarks>Make the implicit Program class public so test projects can access it.</remarks>

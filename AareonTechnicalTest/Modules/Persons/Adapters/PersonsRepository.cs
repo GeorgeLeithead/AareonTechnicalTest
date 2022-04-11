@@ -12,44 +12,44 @@
 			db = context;
 		}
 
-		/// <summary>POST/Add person.</summary>
+		/// <summary>POST/Create person.</summary>
 		/// <param name="person">Person POCO.</param>
 		/// <returns>A person POCO.</returns>
-		public async Task<Person?> AddPerson(Person person)
+		public async Task<Person?> Create(Person person)
 		{
 			db.Persons.Add(person);
 			await db.SaveChangesAsync();
-			return await GetPersonByIdAsync(person.Id);
+			return await ReadByIdAsync(person.Id);
 		}
 
 		/// <summary>DELETE/Delete a person.</summary>
 		/// <param name="person">Person POCO.</param>
 		/// <returns>Number of records affected.</returns>
-		public async Task<int> DeletePerson(Person person)
+		public async Task<int> Delete(Person person)
 		{
 			db.Persons.Remove(person);
 			return await db.SaveChangesAsync();
 		}
 
-		/// <summary>GET/Get person by unique identifier.</summary>
+		/// <summary>GET/Read person by unique identifier.</summary>
 		/// <param name="id">Person identifier.</param>
 		/// <returns>A person POCO.</returns>
-		public Person? GetPersonById(int id)
+		public Person? ReadById(int id)
 		{
 			return db.Persons.FirstOrDefault(p => p.Id == id);
 		}
 
-		/// <summary>GET/Get person asynchronously by unique identifier.</summary>
+		/// <summary>GET/Read person asynchronously by unique identifier.</summary>
 		/// <param name="id">Person identifier.</param>
 		/// <returns>A person POCO.</returns>
-		public Task<Person?> GetPersonByIdAsync(int id)
+		public Task<Person?> ReadByIdAsync(int id)
 		{
 			return db.Persons.FirstOrDefaultAsync(p => p.Id == id);
 		}
 
-		/// <summary>GET/Get persons.</summary>
+		/// <summary>GET/Read persons.</summary>
 		/// <returns>List of all persons.</returns>
-		public async Task<List<Person>?> GetAllPersons()
+		public async Task<List<Person>?> Read()
 		{
 			return await db.Persons.ToListAsync();
 		}
@@ -57,7 +57,7 @@
 		/// <summary>PUT/Update person.</summary>
 		/// <param name="person">Person POCO.</param>
 		/// <returns>Number of records affected.</returns>
-		public async Task<int> PutPerson(Person person)
+		public async Task<int> Update(Person person)
 		{
 			db.Persons.Update(person);
 			return await db.SaveChangesAsync();
@@ -66,7 +66,7 @@
 		/// <summary>Does the person exist in the repository</summary>
 		/// <param name="id">Person identifier.</param>
 		/// <returns>true if exists; otherwise false.</returns>
-		public Task<bool> PersonExistsAsync(int id)
+		public Task<bool> ExistsAsync(int id)
 		{
 			return db.Persons.AnyAsync(p => p.Id == id);
 		}

@@ -1,7 +1,7 @@
 ﻿namespace AareonTechnicalTest.Modules.Persons
 {
 	/// <summary>Persons module.</summary>
-	public class PersonsModule : IModule
+	public class TicketsModule : IModule
 	{
 		/// <summary>Register a module.</summary>
 		/// <param name="services">Service collection.</param>
@@ -17,33 +17,33 @@
 		/// <returns>Endpoint route builder.</returns>
 		public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
 		{
-			endpoints.MapGet("/person/{id}", GetPersonById.Handler)
+			endpoints.MapGet("/person/{id}", EndPoints.Read.HandlerById)
 				.Produces<IPerson>(StatusCodes.Status200OK)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("GetPersonById")
 				.WithTags("Person")
 				.AllowAnonymous();
-			endpoints.MapGet("/person", GetAllPersons.Handler)
-				.Produces<List<IPerson>>(StatusCodes.Status200OK)
+			endpoints.MapGet("/person", EndPoints.Read.HandlerAll)
+				.Produces<IList<IPerson>>(StatusCodes.Status200OK)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("GetAllPersons")
 				.WithTags("Person")
 				.AllowAnonymous();
-			endpoints.MapPut("/person/{id}", UpdatePerson.Handler)
-				.Accepts<Person>("application/json")
+			endpoints.MapPut("/person/{id}", EndPoints.Update.Handler)
+				.Accepts<IPerson>("application/json")
 				.Produces<IPerson>(StatusCodes.Status200OK)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("UpdatePerson")
 				.WithTags("Person")
 				.AllowAnonymous();
-			endpoints.MapPost("/person", AddPerson.Handler)
+			endpoints.MapPost("/person", EndPoints.Create.Handler)
 				.Accepts<IPerson>("application/json")
 				.Produces<IPerson>(StatusCodes.Status201Created)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("AddPerson")
 				.WithTags("Person")
 				.AllowAnonymous();
-			endpoints.MapDelete("/person/{id}", DeletePerson.Handler)
+			endpoints.MapDelete("/person/{id}", EndPoints.Delete.Handler)
 				.Produces(StatusCodes.Status204NoContent)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("DeletePerson")
