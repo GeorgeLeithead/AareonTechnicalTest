@@ -6,17 +6,22 @@
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.Extensions.Hosting;
 
+	/// <summary>API Web application factory.</summary>
 	public class ApiWebApplicationFactory : WebApplicationFactory<Program>
 	{
 		private readonly string _environment;
-		private readonly string _testDatabase;
 
-		public ApiWebApplicationFactory(string environment = "Development", string testDatabase = "Testing")
+		/// <summary>Initialises a new instance of the <see cref="ApiWebApplicationFactory"/> class.</summary>
+		/// <param name="environment">Instance environment.</param>
+		public ApiWebApplicationFactory(string environment = "Development")
 		{
 			_environment = environment;
-			_testDatabase = testDatabase;
 		}
 
+		/// <summary>Create application host.</summary>
+		/// <param name="builder">Host builder</param>
+		/// <remarks>Remove the existing application DBContextOptions and replace with the test version.</remarks>
+		/// <returns>Created host.</returns>
 		protected override IHost CreateHost(IHostBuilder builder)
 		{
 			InMemoryDatabaseRoot root = new();
@@ -29,24 +34,9 @@
 				if (context != null)
 				{
 					services.Remove(context);
-					//ServiceDescriptor[] options = services.Where(r => (r.ServiceType == typeof(DbContextOptions))
-					//  || (r.ServiceType.IsGenericType && r.ServiceType.GetGenericTypeDefinition() == typeof(DbContextOptions<>))).ToArray();
-					//foreach (ServiceDescriptor option in options)
-					//{
-					//	services.Remove(option);
-					//}
 				}
 
-				services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase(_testDatabase, root));
-				//services.AddScoped(sp =>
-				//{
-				//	// Replace SQLite with in-memory database for tests
-
-				//	return new DbContextOptionsBuilder<ApplicationContext>()
-				//		.UseInMemoryDatabase("Testing", root)
-				//		.UseApplicationServiceProvider(sp)
-				//		.Options;
-				//});
+				services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase("Testing", root));
 			});
 
 			return base.CreateHost(builder);

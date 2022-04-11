@@ -7,7 +7,7 @@
 		/// <param name="person">Person to add.</param>
 		/// <param name="personRepository">Person Repository.</param>
 		/// <param name="logger">Logger.</param>
-		/// <returns>Status 200 Ok.</returns>
+		/// <returns>Status 201 Created.</returns>
 		/// <returns>Status 404 Not Found.</returns>
 		public static async Task<IResult> Handler(Person person, IPersonsRepository personRepository, ILogger logger)
 		{
