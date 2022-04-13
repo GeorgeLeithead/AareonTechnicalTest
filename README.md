@@ -67,13 +67,22 @@ Added to the solution is an EditorConfig file, used to enforce consistent coding
 ## Minimal API
 Upgraded project to use the minimal API framework. See [Minimal APIs overview](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-6.0) for details.
 
-## Entity Framework - Code First
+## Entity Framework
+### Code First
 Taking the '[code first](https://entityframework.net/ef-code-first)' principal of Entity Framework, the column 'Note' was added to the 'Ticket' POCO with appropriate attributes.  Then using the Package Manager Console, a new migration was added and then the database was upgraded to include the changes.
 ```cmd
 Add-Migration AddNoteToTicket
 Update-Database
 ```
 I took the decision to make the column nullable and to have a maximum length.
+
+### Query the database
+```PowerShell
+Import-Module PSSQLite
+$Database = ".\Ticketing.db"
+$Query = "SELECT * FROM sqlite_master WHERE type='table'"
+Invoke-SqliteQuery -DataSource $Database -Query $Query
+```
 
 ## JsonIgnore
 After adding a one-to-many reference for ticket to notes, there is a JSON referece loop created.  To avoid this, we ignore the reference loop properties by using ```[JsonIgnore]```.  See [How to ignore properties with System.Text.Json](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-ignore-properties?pivots=dotnet-6-0) for details.

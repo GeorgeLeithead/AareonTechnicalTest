@@ -15,9 +15,9 @@
 		public static List<Ticket> DataTicket =>
 			new()
 			{
-				new Ticket { Content = "Ticket 1", PersonId = 1 },
-				new Ticket { Content = "Ticket 2", PersonId = 2 },
-				new Ticket { Content = "Ticket 3", PersonId = 3 }
+				new Ticket { Content = "Ticket 1", PersonId = (Seed_Persons.DataPerson.Count - 1) },
+				new Ticket { Content = "Ticket 2", PersonId = (Seed_Persons.DataPerson.Count) },
+				new Ticket { Content = "Ticket 3", PersonId = (Seed_Persons.DataPerson.Count - 1) },
 			};
 	}
 
@@ -43,13 +43,14 @@
 		public async void AddTicket_ValidTicket_ReturnsCreatedResult()
 		{
 			// Arrange
+			Ticket newTicket = new() { Content = "New Ticket", PersonId = 1 };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
 			HttpResponseMessage? response = await client.PostAsJsonAsync(
-				"/ticket",
+			"/ticket",
 				new StringContent(
-					JsonSerializer.Serialize(Seed_Tickets.DataTicket[0]),
+					JsonSerializer.Serialize(newTicket),
 					Encoding.UTF8,
 					"application/json")
 				);
@@ -170,7 +171,7 @@
 		{
 			// Arrange
 			int knownId = 2;
-			Ticket updateTicket = new() { Content = "Updated ticket", PersonId = 1 };
+			Ticket updateTicket = new() { Content = "Updated ticket" };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
@@ -195,7 +196,7 @@
 		{
 			// Arrange
 			int unknownId = Seed_Tickets.DataTicket.Count + 99;
-			Ticket updateTicket = new() { Content = "Invalid Update", PersonId = 1 };
+			Ticket updateTicket = new() { Content = "Invalid Update" };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();

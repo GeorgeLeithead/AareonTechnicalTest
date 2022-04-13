@@ -12,14 +12,14 @@
 		public static async Task<IResult> Handler(int id, ITicketsRepository ticketRepository, ILogger logger)
 		{
 			logger.LogInformation("[Modules.Tickets.Delete.Handler] Delete Ticket for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
-			Ticket? thisTicket = await ticketRepository.GetTicketByIdAsync(id);
+			Ticket? thisTicket = await ticketRepository.ReadByIdAsync(id);
 			if (thisTicket == null)
 			{
 				logger.LogError("[Modules.Tickets.Delete.Handler] Ticket not found for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
 
-			await ticketRepository.DeleteTicket(thisTicket);
+			await ticketRepository.Delete(thisTicket);
 			logger.LogInformation("[Modules.Tickets.Delete.Handler] Deleted Ticket for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
 			return Results.NoContent();
 		}

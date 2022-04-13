@@ -23,5 +23,15 @@
 		[DisplayName("Person Surname")]
 		[Description("The persons surname (family name)")]
 		public string? Surname { get; set; }
+
+		/// <summary>Gets or sets the persons list of ticket notes.</summary>
+		[DisplayName("Person Ticket Notes")]
+		[Description("The persons list of ticket notes")]
+		public ICollection<TicketNote> TicketNotes { get; set; }
+
+		/// <summary>Gets or sets the persons list of tickets.</summary>
+		[DisplayName("Person Tickets")]
+		[Description("The persons list of tickets")]
+		public ICollection<Ticket> Tickets { get; set; }
 	}
 }

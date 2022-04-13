@@ -7,17 +7,11 @@
 		/// <param name="modelBuilder">Model builder.</param>
 		public static void Configure(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Person>(
+			modelBuilder.Entity<Ticket>(
 				entity =>
 				{
 					entity.HasKey(e => e.Id);
-				});
-
-			modelBuilder.Entity<TicketNote>(
-				entity =>
-				{
-					entity.HasKey(e => e.Id);
-					entity.HasOne(tn => tn.Ticket).WithMany(t => t.Notes).HasForeignKey(tn => tn.TicketId).HasConstraintName("ForeignKey_TicketNote_Ticket");
+					entity.HasOne(e => e.Person).WithMany(e => e.Tickets).HasForeignKey(e => e.PersonId);
 				});
 		}
 	}

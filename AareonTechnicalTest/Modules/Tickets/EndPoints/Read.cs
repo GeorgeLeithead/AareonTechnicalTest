@@ -11,7 +11,7 @@
 		public static async Task<IResult> HandlerAll(ITicketsRepository ticketRepository, ILogger logger)
 		{
 			logger.LogInformation("[Modules.Tickets.Read.HandlerAll] Return All Tickets @{LogTime}", DateTimeOffset.UtcNow);
-			List<Ticket>? tickets = await ticketRepository.GetAllTickets();
+			List<Ticket>? tickets = await ticketRepository.Read();
 			if (tickets == null)
 			{
 				logger.LogError("[Modules.Tickets.Read.HandlerAll] Tickets not found @{LogTime}", DateTimeOffset.UtcNow);
@@ -33,7 +33,7 @@
 		public static async Task<IResult> HandlerById(int id, ITicketsRepository ticketRepository, ILogger logger)
 		{
 			logger.LogInformation("[Modules.Tickets.Read.HandlerById] Return Ticket for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
-			Ticket? ticket = await ticketRepository.GetTicketByIdAsync(id);
+			Ticket? ticket = await ticketRepository.ReadByIdAsync(id);
 			if (ticket == null)
 			{
 				logger.LogError("[Modules.Tickets.Read.HandlerById] Ticket not found for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);

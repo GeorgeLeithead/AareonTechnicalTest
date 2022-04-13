@@ -1,7 +1,7 @@
 ﻿namespace AareonTechnicalTest.Modules.Persons
 {
 	/// <summary>Persons module.</summary>
-	public class TicketsModule : IModule
+	public class PersonsModule : IModule
 	{
 		/// <summary>Register a module.</summary>
 		/// <param name="services">Service collection.</param>

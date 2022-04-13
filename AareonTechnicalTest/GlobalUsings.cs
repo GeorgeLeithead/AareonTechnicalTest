@@ -1,10 +1,10 @@
 ﻿global using AareonTechnicalTest;
 global using AareonTechnicalTest.Models;
+global using AareonTechnicalTest.Modules.Notes.Adapters;
+global using AareonTechnicalTest.Modules.Notes.Ports;
 global using AareonTechnicalTest.Modules.Persons.Adapters;
-global using AareonTechnicalTest.Modules.Persons.EndPoints;
 global using AareonTechnicalTest.Modules.Persons.Ports;
 global using AareonTechnicalTest.Modules.Tickets.Adapters;
-global using AareonTechnicalTest.Modules.Tickets.EndPoints;
 global using AareonTechnicalTest.Modules.Tickets.Ports;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AareonTechnicalTest.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220331204038_AddNoteToTicket")]
+    [Migration("20220413160129_AddNoteToTicket")]
     partial class AddNoteToTicket
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,12 +45,15 @@ namespace AareonTechnicalTest.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("Tickets");
                 });
@@ -62,6 +65,7 @@ namespace AareonTechnicalTest.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Note")
+                        .IsRequired()
                         .HasMaxLength(254)
                         .HasColumnType("TEXT");
 
@@ -80,29 +84,48 @@ namespace AareonTechnicalTest.Migrations
                     b.ToTable("TicketNotes");
                 });
 
+            modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
+                {
+                    b.HasOne("AareonTechnicalTest.Models.Person", "Person")
+                        .WithMany("Tickets")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("ForeignKey_Person_Tickets");
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("AareonTechnicalTest.Models.TicketNote", b =>
                 {
                     b.HasOne("AareonTechnicalTest.Models.Person", "Person")
-                        .WithMany()
+                        .WithMany("TicketNotes")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("ForeignKey_Person_TicketNotes");
 
                     b.HasOne("AareonTechnicalTest.Models.Ticket", "Ticket")
-                        .WithMany("Notes")
+                        .WithMany("TicketNotes")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("ForeignKey_TicketNote_Ticket");
+                        .IsRequired();
 
                     b.Navigation("Person");
 
                     b.Navigation("Ticket");
                 });
 
+            modelBuilder.Entity("AareonTechnicalTest.Models.Person", b =>
+                {
+                    b.Navigation("TicketNotes");
+
+                    b.Navigation("Tickets");
+                });
+
             modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
                 {
-                    b.Navigation("Notes");
+                    b.Navigation("TicketNotes");
                 });
 #pragma warning restore 612, 618
         }
