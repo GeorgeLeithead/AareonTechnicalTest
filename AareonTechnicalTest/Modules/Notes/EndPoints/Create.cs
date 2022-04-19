@@ -5,7 +5,9 @@
 	{
 		/// <summary>POST/Create note.</summary>
 		/// <param name="note">Note to create.</param>
-		/// <param name="noteRepository">Note Repository.</param>
+		/// <param name="noteRepository">Note repository.</param>
+		/// <param name="ticketsRepository">Ticket repository.</param>
+		/// <param name="personsRepository">Person repository.</param>
 		/// <param name="logger">Logger.</param>
 		/// <returns>Status 201 Created.</returns>
 		/// <returns>Status 404 Not Found.</returns>
@@ -35,7 +37,7 @@
 			else
 			{
 				logger.LogInformation("[Modules.Notes.Create.Handler] Created note with id:={id} @{LogTime}", newNote.Id, DateTimeOffset.UtcNow);
-				return Results.Created("/tickets/notes/" + newNote.Id, newNote);
+				return Results.Created("/ticket/note/" + newNote.Id, newNote);
 			}
 		}
 	}

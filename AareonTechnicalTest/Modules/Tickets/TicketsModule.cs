@@ -26,7 +26,7 @@
 			endpoints.MapGet("/ticket", EndPoints.Read.HandlerAll)
 				.Produces<IList<ITicket>>(StatusCodes.Status200OK)
 				.Produces(StatusCodes.Status404NotFound)
-				.WithName("GetAllTickets")
+				.WithName("GetTicketAll")
 				.WithTags("Ticket")
 				.AllowAnonymous();
 			endpoints.MapPut("/ticket/{id}", EndPoints.Update.Handler)

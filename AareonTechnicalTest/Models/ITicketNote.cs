@@ -9,16 +9,10 @@
 		/// <summary>Gets or sets the note for a ticket.</summary>
 		string Note { get; set; }
 
-		/// <summary>Gets or sets the person who created the note.</summary>
-		Person Person { get; set; }
-
-		/// <summary>Gets or sets the person identifier for the ticket note.</summary>
+		/// <summary>Gets or sets the person for the ticket note.</summary>
 		int PersonId { get; set; }
 
-		/// <summary>Gets or sets the ticket object.</summary>
-		Ticket Ticket { get; set; }
-
-		/// <summary>Gets or sets the ticket identifier for the ticket note.</summary>
+		///<summary>Gets or sets the ticket for the ticket note.</summary>
 		int TicketId { get; set; }
 	}
 }

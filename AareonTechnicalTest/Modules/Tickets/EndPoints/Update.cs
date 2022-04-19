@@ -21,17 +21,17 @@
 				return Results.NotFound();
 			}
 
-			Person? thisPerson = await personRepository.ReadByIdAsync(ticket.Person.Id);
+			Person? thisPerson = await personRepository.ReadByIdAsync(ticket.PersonId);
 			if (thisPerson is null)
 			{
-				logger.LogError("[Modules.Tickets.UpdateTicket.Handler] Person not found for id:={id} @{LogTime}", ticket.Person.Id, DateTimeOffset.UtcNow);
+				logger.LogError("[Modules.Tickets.UpdateTicket.Handler] Person not found for id:={id} @{LogTime}", ticket.PersonId, DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
 
 			try
 			{
 				thisTicket.Content = ticket.Content;
-				thisTicket.Person = thisPerson;
+				thisTicket.PersonId = ticket.PersonId;
 				await ticketRepository.Update(thisTicket);
 			}
 			catch (DbUpdateConcurrencyException ex)

@@ -8,127 +8,116 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AareonTechnicalTest.Migrations
 {
-	/// <summary>Model snapshot.</summary>
-	[DbContext(typeof(ApplicationContext))]
-	partial class ApplicationContextModelSnapshot : ModelSnapshot
-	{
-		/// <summary>Build model snapshot.</summary>
-		/// <param name="modelBuilder">Model builder.</param>
-		protected override void BuildModel(ModelBuilder modelBuilder)
-		{
+    [DbContext(typeof(ApplicationContext))]
+    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    {
+        protected override void BuildModel(ModelBuilder modelBuilder)
+        {
 #pragma warning disable 612, 618
-			modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.4");
 
-			modelBuilder.Entity("AareonTechnicalTest.Models.Person", b =>
-				{
-					b.Property<int>("Id")
-						.ValueGeneratedOnAdd()
-						.HasColumnType("INTEGER");
+            modelBuilder.Entity("AareonTechnicalTest.Models.Person", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-					b.Property<string>("Forename")
-						.HasColumnType("TEXT");
+                    b.Property<string>("Forename")
+                        .HasColumnType("TEXT");
 
-					b.Property<bool>("IsAdmin")
-						.HasColumnType("INTEGER");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("INTEGER");
 
-					b.Property<string>("Surname")
-						.HasColumnType("TEXT");
+                    b.Property<string>("Surname")
+                        .HasColumnType("TEXT");
 
-					b.HasKey("Id");
+                    b.HasKey("Id");
 
-					b.ToTable("Persons");
-				});
+                    b.ToTable("Persons");
+                });
 
-			modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
-				{
-					b.Property<int>("Id")
-						.ValueGeneratedOnAdd()
-						.HasColumnType("INTEGER");
+            modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-					b.Property<string>("Content")
-						.IsRequired()
-						.HasColumnType("TEXT");
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-					b.Property<int>("PersonId")
-						.HasColumnType("INTEGER");
+                    b.Property<int>("PersonId")
+                        .HasColumnType("INTEGER");
 
-					b.HasKey("Id");
+                    b.HasKey("Id");
 
-					b.HasIndex("PersonId");
+                    b.HasIndex("PersonId");
 
-					b.ToTable("Tickets");
-				});
+                    b.ToTable("Tickets");
+                });
 
-			modelBuilder.Entity("AareonTechnicalTest.Models.TicketNote", b =>
-				{
-					b.Property<int>("Id")
-						.ValueGeneratedOnAdd()
-						.HasColumnType("INTEGER");
+            modelBuilder.Entity("AareonTechnicalTest.Models.TicketNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-					b.Property<string>("Note")
-						.IsRequired()
-						.HasMaxLength(254)
-						.HasColumnType("TEXT");
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("TEXT");
 
-					b.Property<int>("PersonId")
-						.HasColumnType("INTEGER");
+                    b.Property<int>("PersonId")
+                        .HasColumnType("INTEGER");
 
-					b.Property<int>("TicketId")
-						.HasColumnType("INTEGER");
+                    b.Property<int>("TicketId")
+                        .HasColumnType("INTEGER");
 
-					b.HasKey("Id");
+                    b.HasKey("Id");
 
-					b.HasIndex("PersonId");
+                    b.HasIndex("PersonId");
 
-					b.HasIndex("TicketId");
+                    b.HasIndex("TicketId");
 
-					b.ToTable("TicketNotes");
-				});
+                    b.ToTable("TicketNotes");
+                });
 
-			modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
-				{
-					b.HasOne("AareonTechnicalTest.Models.Person", "Person")
-						.WithMany("Tickets")
-						.HasForeignKey("PersonId")
-						.OnDelete(DeleteBehavior.Cascade)
-						.IsRequired()
-						.HasConstraintName("ForeignKey_Person_Tickets");
+            modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
+                {
+                    b.HasOne("AareonTechnicalTest.Models.Person", null)
+                        .WithMany("Tickets")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-					b.Navigation("Person");
-				});
+            modelBuilder.Entity("AareonTechnicalTest.Models.TicketNote", b =>
+                {
+                    b.HasOne("AareonTechnicalTest.Models.Person", null)
+                        .WithMany("TicketNotes")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-			modelBuilder.Entity("AareonTechnicalTest.Models.TicketNote", b =>
-				{
-					b.HasOne("AareonTechnicalTest.Models.Person", "Person")
-						.WithMany("TicketNotes")
-						.HasForeignKey("PersonId")
-						.OnDelete(DeleteBehavior.Cascade)
-						.IsRequired()
-						.HasConstraintName("ForeignKey_Person_TicketNotes");
+                    b.HasOne("AareonTechnicalTest.Models.Ticket", null)
+                        .WithMany("TicketNotes")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-					b.HasOne("AareonTechnicalTest.Models.Ticket", "Ticket")
-						.WithMany("TicketNotes")
-						.HasForeignKey("TicketId")
-						.OnDelete(DeleteBehavior.Cascade)
-						.IsRequired();
+            modelBuilder.Entity("AareonTechnicalTest.Models.Person", b =>
+                {
+                    b.Navigation("TicketNotes");
 
-					b.Navigation("Person");
+                    b.Navigation("Tickets");
+                });
 
-					b.Navigation("Ticket");
-				});
-
-			modelBuilder.Entity("AareonTechnicalTest.Models.Person", b =>
-				{
-					b.Navigation("TicketNotes");
-
-					b.Navigation("Tickets");
-				});
-
-			modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
-				{
-					b.Navigation("TicketNotes");
-				});
+            modelBuilder.Entity("AareonTechnicalTest.Models.Ticket", b =>
+                {
+                    b.Navigation("TicketNotes");
+                });
 #pragma warning restore 612, 618
-		}
-	}
+        }
+    }
 }

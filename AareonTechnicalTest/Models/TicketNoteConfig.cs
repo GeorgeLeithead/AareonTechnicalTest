@@ -10,9 +10,15 @@
 			modelBuilder.Entity<TicketNote>(
 				entity =>
 				{
-					entity.HasKey(e => e.Id);
-					entity.HasOne(e => e.Person).WithMany(e => e.TicketNotes).HasForeignKey(e => e.PersonId);
-					entity.HasOne(e => e.Ticket).WithMany(e => e.TicketNotes).HasForeignKey(e => e.TicketId);
+					entity
+						.HasKey(t => t.Id);
+					entity
+						.Property(t => t.Id)
+						.ValueGeneratedOnAdd()
+						.IsRequired();
+					entity
+						.Property(t => t.Note)
+						.HasMaxLength(254);
 				});
 		}
 	}

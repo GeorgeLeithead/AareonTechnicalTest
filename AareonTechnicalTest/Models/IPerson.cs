@@ -15,10 +15,10 @@
 		/// <summary>Gets or sets the Surname of person.</summary>
 		string? Surname { get; set; }
 
-		/// <summary>Gets or sets the persons list of ticket notes.</summary>
-		ICollection<TicketNote> TicketNotes { get; set; }
+		/// <summary>Gets the persons list of ticket notes.</summary>
+		ICollection<TicketNote> TicketNotes { get; }
 
-		/// <summary>Gets or sets the persons list of tickets.</summary>
-		ICollection<Ticket> Tickets { get; set; }
+		/// <summary>Gets the persons list of tickets.</summary>
+		ICollection<Ticket> Tickets { get; }
 	}
 }

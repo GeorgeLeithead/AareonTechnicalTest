@@ -10,9 +10,22 @@
 			modelBuilder.Entity<Person>(
 				entity =>
 				{
-					entity.HasKey(e => e.Id);
-					entity.HasMany(e => e.Tickets).WithOne(e => e.Person).HasConstraintName("ForeignKey_Person_Tickets");
-					entity.HasMany(e => e.TicketNotes).WithOne(e => e.Person).HasConstraintName("ForeignKey_Person_TicketNotes");
+					entity
+						.HasKey(e => e.Id);
+					entity
+						.Property(e => e.Id)
+						.ValueGeneratedOnAdd()
+						.IsRequired();
+					entity
+						.HasMany<Ticket>(p => p.Tickets)
+						.WithOne()
+						.HasForeignKey("PersonId")
+						.IsRequired();
+					entity
+						.HasMany<TicketNote>(p => p.TicketNotes)
+						.WithOne()
+						.HasForeignKey("PersonId")
+						.IsRequired();
 				});
 		}
 	}

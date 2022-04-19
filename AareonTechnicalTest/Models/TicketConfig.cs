@@ -10,8 +10,17 @@
 			modelBuilder.Entity<Ticket>(
 				entity =>
 				{
-					entity.HasKey(e => e.Id);
-					entity.HasOne(e => e.Person).WithMany(e => e.Tickets).HasForeignKey(e => e.PersonId);
+					entity
+						.HasKey(t => t.Id);
+					entity
+						.Property(t => t.Id)
+						.ValueGeneratedOnAdd()
+						.IsRequired();
+					entity
+						.HasMany<TicketNote>(p => p.TicketNotes)
+						.WithOne()
+						.HasForeignKey("TicketId")
+						.IsRequired();
 				});
 		}
 	}

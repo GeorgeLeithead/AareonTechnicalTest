@@ -43,19 +43,17 @@
 		public async void AddTicket_ValidTicket_ReturnsCreatedResult()
 		{
 			// Arrange
-			Ticket newTicket = new() { Content = "New Ticket", PersonId = 1 };
+			int knownPersonId = 2;
+			Ticket newTicket = new() { Content = "New Ticket", PersonId = knownPersonId };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.PostAsJsonAsync(
-			"/ticket",
-				new StringContent(
-					JsonSerializer.Serialize(newTicket),
-					Encoding.UTF8,
-					"application/json")
-				);
+			HttpResponseMessage? responsePerson = await client.GetAsync($"/person/{knownPersonId}");
+
+			HttpResponseMessage? response = await client.PostAsJsonAsync<Ticket>("/ticket", newTicket);
 
 			// Assert
+			Assert.Equal(HttpStatusCode.OK, responsePerson.StatusCode);
 			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 		}
 
@@ -170,20 +168,19 @@
 		public async void UpdateTicket_ExistingIdPassed_ResultsOkResult()
 		{
 			// Arrange
-			int knownId = 2;
-			Ticket updateTicket = new() { Content = "Updated ticket" };
+			int knownTicketId = 2;
+			int knownPersonId = 2;
+			Ticket updateTicket = new() { Content = "Updated ticket", PersonId = knownPersonId };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.PutAsync(
-				$"/ticket/{knownId}",
-				new StringContent(
-					JsonSerializer.Serialize(updateTicket),
-					Encoding.UTF8,
-					"application/json")
-				);
+			HttpResponseMessage? responsePerson = await client.GetAsync($"/person/{knownPersonId}");
+			HttpResponseMessage? responseTicket = await client.GetAsync($"/ticket/{knownTicketId}");
+			HttpResponseMessage? response = await client.PutAsJsonAsync<Ticket>($"/ticket/{knownTicketId}", updateTicket);
 
 			// Assert
+			Assert.Equal(HttpStatusCode.OK, responsePerson.StatusCode);
+			Assert.Equal(HttpStatusCode.OK, responseTicket.StatusCode);
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 		}
 

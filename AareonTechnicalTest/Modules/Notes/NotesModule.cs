@@ -17,38 +17,51 @@
 		/// <returns>Endpoint route builder.</returns>
 		public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
 		{
-			endpoints.MapGet("/tickets/notes/{id}", EndPoints.Read.HandlerById)
+			endpoints.MapGet("/ticket/note/{id}", EndPoints.Read.HandlerById)
 				.Produces<ITicketNote>(StatusCodes.Status200OK)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("GetNotesById")
 				.WithTags("TicketNotes")
 				.AllowAnonymous();
-			endpoints.MapGet("/tickets/notes", EndPoints.Read.HandlerAll)
+			endpoints.MapGet("/ticket/note", EndPoints.Read.HandlerAll)
 				.Produces<IList<ITicketNote>>(StatusCodes.Status200OK)
 				.Produces(StatusCodes.Status404NotFound)
-				.WithName("GetAllNotes")
+				.WithName("GetNotesAll")
 				.WithTags("TicketNotes")
 				.AllowAnonymous();
-			//endpoints.MapPut("/person/{id}", EndPoints.Update.Handler)
-			//	.Accepts<IPerson>("application/json")
-			//	.Produces<IPerson>(StatusCodes.Status200OK)
-			//	.Produces(StatusCodes.Status404NotFound)
-			//	.WithName("UpdatePerson")
-			//	.WithTags("Person")
-			//	.AllowAnonymous();
-			endpoints.MapPost("/tickets/notes", EndPoints.Create.Handler)
+			endpoints.MapGet("/ticket/{ticketId}/note", EndPoints.Read.HandlerByTicketId)
+				.Produces<IList<ITicketNote>>(StatusCodes.Status200OK)
+				.Produces(StatusCodes.Status404NotFound)
+				.WithName("GetNotesByTicketId")
+				.WithTags("TicketNotes")
+				.AllowAnonymous();
+			endpoints.MapGet("/person/{personId}/note", EndPoints.Read.HandlerByPersonId)
+				.Produces<IList<ITicketNote>>(StatusCodes.Status200OK)
+				.Produces(StatusCodes.Status404NotFound)
+				.WithName("GetNotesByPersonId")
+				.WithTags("TicketNotes")
+				.AllowAnonymous();
+			endpoints.MapPut("/ticket/note/{id}", EndPoints.Update.Handler)
+				.Accepts<ITicketNote>("application/json")
+				.Produces<ITicketNote>(StatusCodes.Status200OK)
+				.Produces(StatusCodes.Status404NotFound)
+				.WithName("UpdateTicketNote")
+				.WithTags("TicketNotes")
+				.AllowAnonymous();
+			endpoints.MapPost("/ticket/note", EndPoints.Create.Handler)
 				.Accepts<ITicketNote>("application/json")
 				.Produces<ITicketNote>(StatusCodes.Status201Created)
 				.Produces(StatusCodes.Status404NotFound)
 				.WithName("AddNote")
 				.WithTags("TicketNotes")
 				.AllowAnonymous();
-			//endpoints.MapDelete("/person/{id}", EndPoints.Delete.Handler)
-			//	.Produces(StatusCodes.Status204NoContent)
-			//	.Produces(StatusCodes.Status404NotFound)
-			//	.WithName("DeletePerson")
-			//	.WithTags("Person")
-			//	.AllowAnonymous();
+			endpoints.MapDelete("/ticket/note/{id}", EndPoints.Delete.Handler)
+				.Produces(StatusCodes.Status204NoContent)
+				.Produces(StatusCodes.Status404NotFound)
+				.Produces(StatusCodes.Status403Forbidden)
+				.WithName("DeleteTicketNote")
+				.WithTags("TicketNotes")
+				.AllowAnonymous();
 
 			return endpoints;
 		}

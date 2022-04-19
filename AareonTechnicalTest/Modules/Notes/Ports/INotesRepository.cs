@@ -31,6 +31,10 @@
 		/// <param name="ticketId">Ticket identifier.</param>
 		Task<List<TicketNote>?> ReadByTicketId(int ticketId);
 
+		/// <summary>GET/Read notes for person identifier.</summary>
+		/// <param name="personId">Person identifier.</param>
+		Task<List<TicketNote>?> ReadByPersonId(int personId);
+
 		/// <summary>Does the note exist in the repository</summary>
 		/// <param name="id">Note identifier.</param>
 		/// <returns>true if exists; otherwise false.</returns>

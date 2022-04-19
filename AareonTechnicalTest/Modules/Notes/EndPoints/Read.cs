@@ -46,5 +46,48 @@
 			}
 		}
 
+		/// <summary>GET/Read note by ticket identifier.</summary>
+		/// <param name="ticketId">Ticket identifier.</param>
+		/// <param name="noteRepository">Note Repository.</param>
+		/// <param name="logger">Logger.</param>
+		/// <returns>Status 200 Ok.</returns>
+		/// <returns>Status 404 Not Found.</returns>
+		public static async Task<IResult> HandlerByTicketId(int ticketId, INotesRepository noteRepository, ILogger logger)
+		{
+			logger.LogInformation("[Modules.Notes.Read.HandlerByTicketId] Query Notes for ticketId:={ticketId} @{LogTime}", ticketId, DateTimeOffset.UtcNow);
+			List<TicketNote>? notes = await noteRepository.ReadByTicketId(ticketId);
+			if (notes == null)
+			{
+				logger.LogError("[Modules.Notes.Read.HandlerByTicketId] Notes not found for ticketId:={ticketId} @{LogTime}", ticketId, DateTimeOffset.UtcNow);
+				return Results.NotFound();
+			}
+			else
+			{
+				logger.LogInformation("[Modules.Notes.Read.HandlerByTicketId] Queried Notes for ticketId:={ticketId} @{LogTime}", ticketId, DateTimeOffset.UtcNow);
+				return Results.Ok(notes);
+			}
+		}
+
+		/// <summary>GET/Read notes by person identifier.</summary>
+		/// <param name="personId">Person identifier.</param>
+		/// <param name="noteRepository">Note Repository.</param>
+		/// <param name="logger">Logger.</param>
+		/// <returns>Status 200 Ok.</returns>
+		/// <returns>Status 404 Not Found.</returns>
+		public static async Task<IResult> HandlerByPersonId(int personId, INotesRepository noteRepository, ILogger logger)
+		{
+			logger.LogInformation("[Modules.Notes.Read.HandlerByPersonId] Query Notes for personId:={personId} @{LogTime}", personId, DateTimeOffset.UtcNow);
+			List<TicketNote>? notes = await noteRepository.ReadByPersonId(personId);
+			if (notes == null)
+			{
+				logger.LogError("[Modules.Notes.Read.HandlerByPersonId] Notes not found for personId:={personId} @{LogTime}", personId, DateTimeOffset.UtcNow);
+				return Results.NotFound();
+			}
+			else
+			{
+				logger.LogInformation("[Modules.Notes.Read.HandlerByPersonId] Queried Notes for personId:={personId} @{LogTime}", personId, DateTimeOffset.UtcNow);
+				return Results.Ok(notes);
+			}
+		}
 	}
 }

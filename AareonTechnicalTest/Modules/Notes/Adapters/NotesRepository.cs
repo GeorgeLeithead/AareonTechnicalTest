@@ -58,7 +58,15 @@
 		/// <param name="ticketId">Ticket identifier.</param>
 		public async Task<List<TicketNote>?> ReadByTicketId(int ticketId)
 		{
-			return await db.TicketNotes.Where(e => e.Ticket.Id == ticketId).ToListAsync();
+			return await db.TicketNotes.Where(e => e.TicketId == ticketId).ToListAsync();
+		}
+
+		/// <summary>GET/Read notes for person identifier.</summary>
+		/// <param name="personId">Person identifier.</param>
+		/// <returns></returns>
+		public async Task<List<TicketNote>?> ReadByPersonId(int personId)
+		{
+			return await db.TicketNotes.Where(e => e.PersonId == personId).ToListAsync();
 		}
 
 		/// <summary>Does the note exist in the repository</summary>
