@@ -98,7 +98,7 @@
 		///  - Model count greater than 0 (seed expected to be at least 1).
 		/// </remarks>
 		[Fact]
-		public async void GetAllTickets_WhenCalled_ReturnsAllItems()
+		public async void GetTicketAll_WhenCalled_ReturnsAllItems()
 		{
 			// Arrange
 
@@ -112,7 +112,7 @@
 		/// <summary>Test for GET/Get all tickets.</summary>
 		/// <remarks>Expected response: Status200OK</remarks>
 		[Fact]
-		public async void GetAllTickets_WhenCalled_ReturnsOkResult()
+		public async void GetTicketAll_WhenCalled_ReturnsOkResult()
 		{
 			// Arrange
 

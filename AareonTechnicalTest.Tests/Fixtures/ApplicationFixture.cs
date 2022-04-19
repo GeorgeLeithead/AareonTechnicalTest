@@ -36,6 +36,7 @@
 				await notesDbContext.Database.EnsureCreatedAsync();
 				await notesDbContext.AddRangeAsync(Seed_Persons.DataPerson);
 				await notesDbContext.AddRangeAsync(Seed_Tickets.DataTicket);
+				await notesDbContext.AddRangeAsync(Seed_TicketNotes.DataTicketNote);
 				await notesDbContext.SaveChangesAsync();
 			}
 

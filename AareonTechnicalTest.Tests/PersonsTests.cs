@@ -97,7 +97,7 @@
 		///  - Model count greater than 0 (seed expected to be at least 1).
 		/// </remarks>
 		[Fact]
-		public async void GetAllPersons_WhenCalled_ReturnsAllItems()
+		public async void GetPersonAll_WhenCalled_ReturnsAllItems()
 		{
 			// Arrange
 
@@ -111,7 +111,7 @@
 		/// <summary>Test for GET/Get all persons.</summary>
 		/// <remarks>Expected response: Status200OK</remarks>
 		[Fact]
-		public async void GetAllPersons_WhenCalled_ReturnsOkResult()
+		public async void GetPersonAll_WhenCalled_ReturnsOkResult()
 		{
 			// Arrange
 
