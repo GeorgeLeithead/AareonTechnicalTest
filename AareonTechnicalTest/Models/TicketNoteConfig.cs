@@ -7,12 +7,19 @@
 		/// <param name="modelBuilder">Model builder.</param>
 		public static void Configure(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Ticket>(
+			modelBuilder.Entity<TicketNote>(
 				entity =>
 				{
-					entity.HasKey(e => e.Id);
+					entity
+						.HasKey(t => t.Id);
+					entity
+						.Property(t => t.Id)
+						.ValueGeneratedOnAdd()
+						.IsRequired();
+					entity
+						.Property(t => t.Note)
+						.HasMaxLength(254);
 				});
 		}
-
 	}
 }

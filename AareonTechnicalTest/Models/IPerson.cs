@@ -14,5 +14,11 @@
 
 		/// <summary>Gets or sets the Surname of person.</summary>
 		string? Surname { get; set; }
+
+		/// <summary>Gets the persons list of ticket notes.</summary>
+		ICollection<TicketNote> TicketNotes { get; }
+
+		/// <summary>Gets the persons list of tickets.</summary>
+		ICollection<Ticket> Tickets { get; }
 	}
 }

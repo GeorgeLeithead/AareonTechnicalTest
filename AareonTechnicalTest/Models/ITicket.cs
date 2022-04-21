@@ -4,15 +4,15 @@
 	public interface ITicket
 	{
 		/// <summary>Gets or sets the Content of a ticket.</summary>
-		string? Content { get; set; }
+		string Content { get; set; }
 
 		/// <summary>Gets the Unique Ticket Identifier</summary>
-		int Id { get; }
+		int Id { get; set; }
 
-		/// <summary>Gets or sets the collection of notes for the ticket.</summary>
-		ICollection<TicketNote>? Notes { get; set; }
+		/// <summary>Gets the collection of notes for the ticket.</summary>
+		ICollection<TicketNote> TicketNotes { get; }
 
-		/// <summary>Gets or sets the Person identifier for ticket.</summary>
+		/// <summary>Gets or sets the person for the ticket.</summary>
 		int PersonId { get; set; }
 	}
 }
