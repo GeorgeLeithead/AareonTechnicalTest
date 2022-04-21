@@ -17,11 +17,9 @@
 				logger.LogError("[Modules.Persons.Read.HandlerAll] Persons not found @{LogTime}", DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
-			else
-			{
-				logger.LogInformation("[Modules.Persons.Read.HandlerAll] Queried All Persons @{LogTime}", DateTimeOffset.UtcNow);
-				return Results.Ok(persons);
-			}
+
+			logger.LogInformation("[Modules.Persons.Read.HandlerAll] Queried All Persons @{LogTime}", DateTimeOffset.UtcNow);
+			return Results.Ok(persons);
 		}
 
 		/// <summary>GET/Read person by unique identifier.</summary>
@@ -39,12 +37,9 @@
 				logger.LogError("[Modules.Persons.Read.HandlerById] Person not found for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
-			else
-			{
-				logger.LogInformation("[Modules.Persons.Read.HandlerById] Queried Person for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
-				return Results.Ok(person);
-			}
-		}
 
+			logger.LogInformation("[Modules.Persons.Read.HandlerById] Queried Person for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
+			return Results.Ok(person);
+		}
 	}
 }

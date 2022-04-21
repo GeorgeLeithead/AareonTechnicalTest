@@ -13,6 +13,11 @@
 		/// <returns>Number of records affected.</returns>
 		Task<int> Delete(Ticket ticket);
 
+		/// <summary>Does the ticket exist in the repository</summary>
+		/// <param name="id">Ticket identifier.</param>
+		/// <returns>true if exists; otherwise false.</returns>
+		Task<bool> ExistsAsync(int id);
+
 		/// <summary>GET/Get Tickets.</summary>
 		/// <returns>List of all Tickets.</returns>
 		Task<List<Ticket>?> Read();
@@ -27,14 +32,14 @@
 		/// <returns>A ticket POCO.</returns>
 		Task<Ticket?> ReadByIdAsync(int id);
 
+		/// <summary>GET/Get tickets by person identifier.</summary>
+		/// <param name="personId">Person identifier.</param>
+		/// <returns>List of person tickets.</returns>
+		Task<List<Ticket>?> ReadByPersonIdAsync(int personId);
+
 		/// <summary>PUT/Update ticket.</summary>
 		/// <param name="ticket">Ticket POCO.</param>
 		/// <returns>Number of records affected.</returns>
 		Task<int> Update(Ticket ticket);
-
-		/// <summary>Does the ticket exist in the repository</summary>
-		/// <param name="id">Ticket identifier.</param>
-		/// <returns>true if exists; otherwise false.</returns>
-		Task<bool> ExistsAsync(int id);
 	}
 }

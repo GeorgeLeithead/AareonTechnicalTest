@@ -22,7 +22,7 @@
 				return Results.NotFound();
 			}
 
-			Ticket? thisTicket = await ticketRepository.ReadByIdAsync(thisTicketNote.TicketId);
+			Ticket? thisTicket = await ticketRepository.ReadByIdAsync(ticketNote.TicketId);
 			if (thisTicket is null)
 			{
 				logger.LogError("[Modules.Notes.UpdateTicketNote.Handler] Ticket not found for id:={id} @{LogTime}", ticketNote.TicketId, DateTimeOffset.UtcNow);

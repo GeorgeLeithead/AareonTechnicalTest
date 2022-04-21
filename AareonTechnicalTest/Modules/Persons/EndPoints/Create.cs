@@ -18,11 +18,9 @@
 				logger.LogError("[Modules.Persons.Create.Handler] Person not created @{LogTime}", DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
-			else
-			{
-				logger.LogInformation("[Modules.Persons.Create.Handler] Created Person with id:={id} @{LogTime}", newPerson.Id, DateTimeOffset.UtcNow);
-				return Results.Created("/person/" + newPerson.Id, newPerson);
-			}
+
+			logger.LogInformation("[Modules.Persons.Create.Handler] Created Person with id:={id} @{LogTime}", newPerson.Id, DateTimeOffset.UtcNow);
+			return Results.Created("/person/" + newPerson.Id, newPerson);
 		}
 	}
 }

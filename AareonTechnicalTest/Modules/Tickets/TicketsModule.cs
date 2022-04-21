@@ -23,6 +23,12 @@
 				.WithName("GetTicketById")
 				.WithTags("Ticket")
 				.AllowAnonymous();
+			endpoints.MapGet("/person/{personId}/ticket", EndPoints.Read.HandlerByPersonId)
+				.Produces<ITicket>(StatusCodes.Status200OK)
+				.Produces(StatusCodes.Status404NotFound)
+				.WithName("GetTicketByPersonId")
+				.WithTags("Ticket")
+				.AllowAnonymous();
 			endpoints.MapGet("/ticket", EndPoints.Read.HandlerAll)
 				.Produces<IList<ITicket>>(StatusCodes.Status200OK)
 				.Produces(StatusCodes.Status404NotFound)

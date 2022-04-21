@@ -33,180 +33,155 @@
 			appFixture = fixture;
 		}
 
-		/// <summary>Test for POST/Create Person.</summary>
-		/// <remarks>Passed in: Valid person object.<br />
-		///   Expected response: Status201Created
-		/// </remarks>
+		#region POST/Add
+
+		/// <summary>Test for valid POST/Create Person.</summary>
 		[Fact]
-		public async void AddPerson_ValidPerson_ReturnsCreatedResult()
+		public async void Add_Valid_WhenCalled_Ok()
 		{
 			// Arrange
+			StringContent addPerson = new(JsonSerializer.Serialize(Seed_Persons.DataPerson[0]), Encoding.UTF8, "application/json");
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.PostAsJsonAsync(
-				"/person",
-				new StringContent(
-					JsonSerializer.Serialize(Seed_Persons.DataPerson[0]),
-					Encoding.UTF8,
-					"application/json")
-				);
+			HttpResponseMessage response = await client.PostAsJsonAsync("/person", addPerson);
 
 			// Assert
 			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 		}
 
-		/// <summary>Test for DELETE/Delete person.</summary>
-		/// <remarks>Passed In: Valid person identifier (seed expected).br />
-		///  - Expected response: Status204NoContent
-		/// </remarks>
+		#endregion
+
+		#region DELETE/Delete
+
+		/// <summary>Test for valid DELETE/Delete person.</summary>
 		[Fact]
-		public async void DeletePerson_ExistingIdPassed_ResultsNoContentResult()
+		public async void Delete_Valid_NoContent()
 		{
 			// Arrange
-			int knownId = 1;
+			int knownPersonId = 1;
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.DeleteAsync($"/person/{knownId}");
+			HttpResponseMessage response = await client.DeleteAsync($"/person/{knownPersonId}");
 
 			// Assert
 			Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 		}
 
-		/// <summary>Test for DELETE/Delete person.</summary>
-		/// <remarks>Passed In: Invalid/Unknown person identifier (seed expected).<br />
-		///  - Expected response: Status404NotFound
-		/// </remarks>
+		/// <summary>Test for invalid DELETE/Delete person.</summary>
+		/// <remarks>Person Id not found.</remarks>
 		[Fact]
-		public async void DeletePerson_UnknownIdPassed_ResultsNotFound()
+		public async void Delete_InValid_NotFound()
 		{
 			// Arrange
-			int unknownId = Seed_Persons.DataPerson.Count + 99;
+			int unknownPersonId = 99;
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.DeleteAsync($"/person/{unknownId}");
+			HttpResponseMessage response = await client.DeleteAsync($"/person/{unknownPersonId}");
 
 			// Assert
 			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 		}
 
-		/// <summary>Test for GET/Get all persons.</summary>
-		/// <remarks>Expected: Is Assignable to return type.<br />
-		///  - Model count greater than 0 (seed expected to be at least 1).
-		/// </remarks>
+		#endregion
+
+		#region GET/Read
+
+		/// <summary>Test for valid GET/Get all persons.</summary>
 		[Fact]
-		public async void GetPersonAll_WhenCalled_ReturnsAllItems()
+		public async void GetAll_Valid_Ok()
 		{
 			// Arrange
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			List<Person>? response = await client.GetFromJsonAsync<List<Person>>("/person");
-			List<Person>? model = Assert.IsAssignableFrom<List<Person>>(response);
-			Assert.True(model.Count > 0);
-		}
-
-		/// <summary>Test for GET/Get all persons.</summary>
-		/// <remarks>Expected response: Status200OK</remarks>
-		[Fact]
-		public async void GetPersonAll_WhenCalled_ReturnsOkResult()
-		{
-			// Arrange
-
-			// Act
-			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.GetAsync("/person");
+			HttpResponseMessage response = await client.GetAsync("/person");
+			Stream stream = await response.Content.ReadAsStreamAsync();
 
 			// Assert
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.IsAssignableFrom<List<Person>>(await JsonSerializer.DeserializeAsync<List<Person>>(stream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }));
 		}
 
-		/// <summary>Test for GET/Get person by id.</summary>
-		/// <remarks>Passed In: Valid person identifier (seed expected).<br />
-		///  - Expected response: Status200OK
-		/// </remarks>
+		/// <summary>Test for valid GET/Get person by id.</summary>
 		[Fact]
-		public async void GetPersonById_ExistingIdPassed_ReturnsOkResult()
+		public async void GetById_Valid_Ok()
 		{
 			// Arrange
-			int knownId = 2;
+			int knownPersonId = 2;
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.GetAsync($"/person/{knownId}");
+			HttpResponseMessage response = await client.GetAsync($"/person/{knownPersonId}");
+			Stream stream = await response.Content.ReadAsStreamAsync();
 
 			// Assert
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.IsAssignableFrom<Person>(await JsonSerializer.DeserializeAsync<Person>(stream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }));
 		}
 
-		/// <summary>Test for GET/Get person by id.</summary>
-		/// <remarks>Passed In: Invalid/Unknown person identifier (seed expected).<br />
-		///  - Expected response: Status404NotFound
-		/// </remarks>
+		/// <summary>Test for invalid GET/Get person by id.</summary>
+		/// <remarks>Person Id not found.</remarks>
 		[Fact]
-		public async void GetPersonById_UnknownIdPassed_ReturnsNotFoundResult()
+		public async void GetById_InValid_NotFound()
 		{
 			// Arrange
-			int unknownId = Seed_Persons.DataPerson.Count + 99;
+			int unknownPersonId = 99;
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.GetAsync($"/person/{unknownId}");
+			HttpResponseMessage response = await client.GetAsync($"/person/{unknownPersonId}");
 
 			// Assert
 			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 		}
 
-		/// <summary>Test for PUT/Update person.</summary>
-		/// <remarks>Passed In: Valid person identifier (seed expected).<br />
-		///  - Expected response: Status200OK
-		/// </remarks>
+		#endregion
+
+		#region PUT/Update
+
+		/// <summary>Test for valid PUT/Update person.</summary>
 		[Fact]
-		public async void UpdatePerson_ExistingIdPassed_ResultsOkResult()
+		public async void Update_Valid_Ok()
 		{
 			// Arrange
-			int knownId = 2;
+			int knownPersonId = 2;
 			Person updatePerson = new() { Forename = "Tiger", Surname = "Woods", IsAdmin = false };
+			StringContent updatePersonJson = new(JsonSerializer.Serialize(updatePerson), Encoding.UTF8, "application/json");
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.PutAsync(
-				$"/person/{knownId}",
-				new StringContent(
-					JsonSerializer.Serialize(updatePerson),
-					Encoding.UTF8,
-					"application/json")
-				);
+			HttpResponseMessage response = await client.PutAsync($"/person/{knownPersonId}", updatePersonJson);
+			Stream stream = await response.Content.ReadAsStreamAsync();
 
 			// Assert
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Person? updatedPerson = Assert.IsAssignableFrom<Person>(await JsonSerializer.DeserializeAsync<Person>(stream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }));
+			Assert.Equal(updatePerson.Forename, updatedPerson.Forename);
+			Assert.Equal(updatePerson.Surname, updatedPerson.Surname);
+			Assert.Equal(updatePerson.IsAdmin, updatedPerson.IsAdmin);
 		}
 
-		/// <summary>Test for PUT/Update person.</summary>
-		/// <remarks>Passed In: Invalid/Unknown person identifier (seed expected).<br />
-		///  - Expected response: Status404NotFound
-		///  </remarks>
+		/// <summary>Test for invalid PUT/Update person.</summary>
+		/// <remarks>Person Id not found.</remarks>
 		[Fact]
-		public async void UpdatePerson_UnknownIdPassed_ResultsNotFoundResult()
+		public async void Update_InValid_PersonId_NotFound()
 		{
 			// Arrange
-			int unknownId = Seed_Persons.DataPerson.Count + 99;
+			int unknownPersonId = 99;
 			Person updatePerson = new() { Forename = "Tiger", Surname = "Woods", IsAdmin = false };
+			StringContent updatePersonJson = new(JsonSerializer.Serialize(updatePerson), Encoding.UTF8, "application/json");
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.PutAsync(
-				$"/person/{unknownId}",
-				new StringContent(
-					JsonSerializer.Serialize(updatePerson),
-					Encoding.UTF8,
-					"application/json")
-				);
+			HttpResponseMessage response = await client.PutAsync($"/person/{unknownPersonId}", updatePersonJson);
 
 			// Assert
 			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 		}
+
+		#endregion
 	}
 }

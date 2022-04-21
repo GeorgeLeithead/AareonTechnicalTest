@@ -34,11 +34,9 @@
 				logger.LogError("[Modules.Notes.Create.Handler] Note not created @{LogTime}", DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
-			else
-			{
-				logger.LogInformation("[Modules.Notes.Create.Handler] Created note with id:={id} @{LogTime}", newNote.Id, DateTimeOffset.UtcNow);
-				return Results.Created("/ticket/note/" + newNote.Id, newNote);
-			}
+
+			logger.LogInformation("[Modules.Notes.Create.Handler] Created note with id:={id} @{LogTime}", newNote.Id, DateTimeOffset.UtcNow);
+			return Results.Created("/ticket/note/" + newNote.Id, newNote);
 		}
 	}
 }

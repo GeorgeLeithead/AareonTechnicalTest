@@ -17,11 +17,9 @@
 				logger.LogError("[Modules.Tickets.Read.HandlerAll] Tickets not found @{LogTime}", DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
-			else
-			{
-				logger.LogInformation("[Modules.Tickets.Read.HandlerAll] Returned All Tickets @{LogTime}", DateTimeOffset.UtcNow);
-				return Results.Ok(tickets);
-			}
+
+			logger.LogInformation("[Modules.Tickets.Read.HandlerAll] Returned All Tickets @{LogTime}", DateTimeOffset.UtcNow);
+			return Results.Ok(tickets);
 		}
 
 		/// <summary>GET/Read ticket by unique identifier.</summary>
@@ -39,12 +37,24 @@
 				logger.LogError("[Modules.Tickets.Read.HandlerById] Ticket not found for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
-			else
-			{
-				logger.LogInformation("[Modules.Tickets.Read.HandlerById] Returned Ticket for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
-				return Results.Ok(ticket);
-			}
+
+			logger.LogInformation("[Modules.Tickets.Read.HandlerById] Returned Ticket for id:={id} @{LogTime}", id, DateTimeOffset.UtcNow);
+			return Results.Ok(ticket);
 		}
 
+		/// <summary>GET/Read ticket by person identifier.</summary>
+		public static async Task<IResult> HandlerByPersonId(int personId, ITicketsRepository ticketRepository, IPersonsRepository personsRepository, ILogger logger)
+		{
+			logger.LogInformation("[Modules.Tickets.Read.HandlerByPersonId] Return Ticket for personid:={id} @{LogTime}", personId, DateTimeOffset.UtcNow);
+			Person? person = await personsRepository.ReadByIdAsync(personId);
+			if (person is null)
+			{
+				logger.LogError("[Modules.Tickets.Read.HandlerByPersonId] Person not found for id:={id} @{LogTime}", personId, DateTimeOffset.UtcNow);
+				return Results.NotFound();
+			}
+
+			logger.LogInformation("[Modules.Tickets.Read.HandlerByPersonId] Returned Ticket for personid:={id} @{LogTime}", personId, DateTimeOffset.UtcNow);
+			return Results.Ok(await ticketRepository.ReadByPersonIdAsync(personId));
+		}
 	}
 }

@@ -26,11 +26,9 @@
 				logger.LogError("[Modules.Tickets.Create.Handler] Ticket not added @{LogTime}", DateTimeOffset.UtcNow);
 				return Results.NotFound();
 			}
-			else
-			{
-				logger.LogInformation("[Modules.Tickets.Create.Handler] Created Ticket with id:={id} @{LogTime}", newTicket.Id, DateTimeOffset.UtcNow);
-				return Results.Created("/ticket/" + newTicket.Id, newTicket);
-			}
+
+			logger.LogInformation("[Modules.Tickets.Create.Handler] Created Ticket with id:={id} @{LogTime}", newTicket.Id, DateTimeOffset.UtcNow);
+			return Results.Created("/ticket/" + newTicket.Id, newTicket);
 		}
 	}
 }

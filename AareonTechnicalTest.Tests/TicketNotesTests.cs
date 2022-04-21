@@ -9,7 +9,6 @@
 	using System.Text.Json;
 	using Xunit;
 
-
 	/// <summary>Seed the Tickets table.</summary>
 	public static class Seed_TicketNotes
 	{
@@ -24,9 +23,7 @@
 			};
 	}
 
-
 	[Collection("Context Collection")]
-	/// <summary>Tests for Ticket Notes.</summary>
 	public class TicketNotesTests
 	{
 		private readonly ApplicationFixture appFixture;
@@ -38,81 +35,316 @@
 			appFixture = fixture;
 		}
 
-		/// <summary>Test for GET/Get all ticket notes.</summary>
-		/// <remarks>Expected: Is Assignable to return type.<br />
-		///  - Model count greater than 0 (seed expected to be at least 4).
-		/// </remarks>
+		#region POST/Add
+
+		/// <summary>Test for invalid POST/Create Ticket Note.</summary>
+		/// <remarks>Person Id not found.</remarks>
 		[Fact]
-		public async void GetTicketNoteAll_WhenCalled_ReturnsAllItems()
+		public async void Add_InValid_PersonId_NotFound()
 		{
 			// Arrange
+			int unknownPersonId = 99;
+			int knownTicketId = 1;
+			TicketNote newTicketNote = new() { Note = "An brand new ticket note", PersonId = unknownPersonId, TicketId = knownTicketId };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			List<TicketNote>? response = await client.GetFromJsonAsync<List<TicketNote>>("/ticket/note");
-			List<TicketNote>? model = Assert.IsAssignableFrom<List<TicketNote>>(response);
-			Assert.True(model.Count > 0);
-		}
-
-
-		/// <summary>Test for GET/Get all ticket notes.</summary>
-		/// <remarks>Expected response: Status200OK</remarks>
-		[Fact]
-		public async void GetTicketNoteAll_WhenCalled_ReturnsOkResult()
-		{
-			// Arrange
-
-			// Act
-			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.GetAsync("/ticket/note");
+			HttpResponseMessage responsePerson = await client.GetAsync($"/person/{unknownPersonId}");
+			HttpResponseMessage responseTicket = await client.GetAsync($"/ticket/{knownTicketId}");
+			HttpResponseMessage response = await client.PostAsJsonAsync<TicketNote>("/ticket/note", newTicketNote);
 
 			// Assert
-			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.Equal(HttpStatusCode.NotFound, responsePerson.StatusCode);
+			Assert.Equal(HttpStatusCode.OK, responseTicket.StatusCode);
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 		}
 
-		/// <summary>Test for GET/Get ticket note by id.</summary>
-		/// <remarks>Passed In: Valid ticket note identifier (seed expected).<br />
-		///  - Expected response: Status200OK
-		/// </remarks>
+		/// <summary>Test for invalid POST/Create Ticket Note.</summary>
+		/// <remarks>Ticket Id not found.</remarks>
 		[Fact]
-		public async void GetTicketNoteById_ExistingIdPassed_ReturnsOkResult()
+		public async void Add_InValid_TicketId_NotFound()
 		{
 			// Arrange
-			int knownId = 2;
+			int knownPersonId = 2;
+			int unknownTicketId = 99;
+			TicketNote newTicketNote = new() { Note = "An brand new ticket note", PersonId = knownPersonId, TicketId = unknownTicketId };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.GetAsync($"/ticket/note/{knownId}");
+			HttpResponseMessage responsePerson = await client.GetAsync($"/person/{knownPersonId}");
+			HttpResponseMessage responseTicket = await client.GetAsync($"/ticket/{unknownTicketId}");
+			HttpResponseMessage response = await client.PostAsJsonAsync<TicketNote>("/ticket/note", newTicketNote);
 
 			// Assert
-			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.Equal(HttpStatusCode.OK, responsePerson.StatusCode);
+			Assert.Equal(HttpStatusCode.NotFound, responseTicket.StatusCode);
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 		}
 
-		/// <summary>Test for GET/Get ticket note by id.</summary>
-		/// <remarks>Passed In: Invalid/Unknown ticket note identifier (seed expected).<br />
-		///  - Expected response: Status404NotFound
-		/// </remarks>
+		/// <summary>Test for valid POST/Create Ticket Note.</summary>
 		[Fact]
-		public async void GetTicketNoteById_UnknownIdPassed_ReturnsNotFoundResult()
+		public async void Add_Valid_Created()
 		{
 			// Arrange
-			int unknownId = Seed_TicketNotes.DataTicketNote.Count + 99;
+			int knownPersonId = 2;
+			int knownTicketId = 1;
+			TicketNote newTicketNote = new() { Note = "An brand new ticket note", PersonId = knownPersonId, TicketId = knownTicketId };
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.GetAsync($"/ticket/note/{unknownId}");
+			HttpResponseMessage responsePerson = await client.GetAsync($"/person/{knownPersonId}");
+			HttpResponseMessage responseTicket = await client.GetAsync($"/ticket/{knownTicketId}");
+			HttpResponseMessage response = await client.PostAsJsonAsync<TicketNote>("/ticket/note", newTicketNote);
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, responsePerson.StatusCode);
+			Assert.Equal(HttpStatusCode.OK, responseTicket.StatusCode);
+			Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+		}
+
+		#endregion POST/Add
+
+		#region DELETE/Delete
+
+		/// <summary>Test for invalid DELETE/Delete ticket note.</summary>
+		/// <remarks>Person is not admin.</remarks>
+		[Fact]
+		public async void Delete_InValid_PersonNotAdmin_Forbidden()
+		{
+			// Arrange
+			int knownTicketNoteIdPersonNotAdmin = 3;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.DeleteAsync($"/ticket/note/{knownTicketNoteIdPersonNotAdmin}");
+
+			// Assert
+			// TODO: Update this test to check for a Forbidden status code, when the API implements authorisation!
+			//Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+			Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+		}
+
+		/// <summary>Test for DELETE/Delete ticket note.</summary>
+		/// <remarks>Ticket Note Id not found.</remarks>
+		[Fact]
+		public async void Delete_InValid_TicketNoteId_NotFound()
+		{
+			// Arrange
+			int unknownTicketNoteId = 99;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.DeleteAsync($"/ticket/note/{unknownTicketNoteId}");
 
 			// Assert
 			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 		}
 
+		/// <summary>Test for valid DELETE/Delete ticket note.</summary>
+		[Fact]
+		public async void Delete_Valid_TicketNoteId_NoContent()
+		{
+			// Arrange
+			int knownTicketNoteId = 1; // From seed, this ticket note has a person who IsAdmin
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.DeleteAsync($"/ticket/note/{knownTicketNoteId}");
+
+			// Assert
+			Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+		}
+
+		#endregion DELETE/Delete
+
+		#region GET/Read
+
+		/// <summary>Test for valid GET/Get all ticket notes.</summary>
+		[Fact]
+		public async void GetAll_Valid_Ok()
+		{
+			// Arrange
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.GetAsync("/ticket/note");
+			Stream stream = await response.Content.ReadAsStreamAsync();
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.IsAssignableFrom<List<TicketNote>>(await JsonSerializer.DeserializeAsync<List<TicketNote>>(stream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }));
+		}
+
+		/// <summary>Test for invalid GET/Get ticket note by id.</summary>
+		/// <remarks>Ticket note Id not found.</remarks>
+		[Fact]
+		public async void GetById_InValid_TicketNoteId_NotFound()
+		{
+			// Arrange
+			int unknownTicketNoteId = 99;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.GetAsync($"/ticket/note/{unknownTicketNoteId}");
+
+			// Assert
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+		}
+
+		/// <summary>Test for valid GET/Get ticket note by id.</summary>
+		[Fact]
+		public async void GetById_Valid_Ok()
+		{
+			// Arrange
+			int knownTicketNoteId = 2;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.GetAsync($"/ticket/note/{knownTicketNoteId}");
+			Stream stream = await response.Content.ReadAsStreamAsync();
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.IsAssignableFrom<TicketNote>(await JsonSerializer.DeserializeAsync<TicketNote>(stream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }));
+		}
+
+		/// <summary>Test for invalid GET/Get ticket note by person id.</summary>
+		/// <remarks>Person Id not found.</remarks>
+		[Fact]
+		public async void GetByPersonId_InValid_PersonId_NotFound()
+		{
+			// Arrange
+			int unknownPersonId = 99;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.GetAsync($"/person/{unknownPersonId}/note");
+
+			// Assert
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+		}
+
+		/// <summary>Test for valid GET/Get ticket note by person id.</summary>
+		[Fact]
+		public async void GetByPersonId_Valid_Ok()
+		{
+			// Arrange
+			int knownPersonId = 2;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.GetAsync($"/person/{knownPersonId}/note");
+			Stream stream = await response.Content.ReadAsStreamAsync();
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.IsAssignableFrom<List<TicketNote>>(await JsonSerializer.DeserializeAsync<List<TicketNote>>(stream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }));
+		}
+
+		/// <summary>Test for invalid GET/Get ticket note by ticket id.</summary>
+		/// <remarks>Ticket Id not found.</remarks>
+		[Fact]
+		public async void GetByTicketId_InValid_TicketId_NotFound()
+		{
+			// Arrange
+			int unknownTicketId = 99;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.GetAsync($"/ticket/{unknownTicketId}/note");
+
+			// Assert
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+		}
+
+		/// <summary>Test for valid GET/Get ticket note by ticket id.</summary>
+		[Fact]
+		public async void GetByTicketId_Valid_Ok()
+		{
+			// Arrange
+			int knownTicketId = 2;
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.GetAsync($"/ticket/{knownTicketId}/note");
+			Stream stream = await response.Content.ReadAsStreamAsync();
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+			Assert.IsAssignableFrom<List<TicketNote>>(await JsonSerializer.DeserializeAsync<List<TicketNote>>(stream, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }));
+		}
+
+		#endregion GET/Read
+
+		#region PUT/Update
+
+		/// <summary>Test for invalid PUT/Update ticket note.</summary>
+		/// <remarks>Person Id not found.</remarks>
+		[Fact]
+		public async void Update_InValid_PersonId_NotFound()
+		{
+			// Arrange
+			int knownTicketNoteId = 2;
+			int unknownPersonId = 99;
+			int knownTicketId = 2;
+			TicketNote updateTicketNote = new() { Note = "Updated note", PersonId = unknownPersonId, TicketId = knownTicketId };
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage responsePerson = await client.GetAsync($"/person/{unknownPersonId}");
+			HttpResponseMessage responseTicket = await client.GetAsync($"/ticket/{knownTicketId}");
+			HttpResponseMessage response = await client.PutAsJsonAsync<TicketNote>($"/ticket/note/{knownTicketNoteId}", updateTicketNote);
+
+			// Assert
+			Assert.Equal(HttpStatusCode.NotFound, responsePerson.StatusCode);
+			Assert.Equal(HttpStatusCode.OK, responseTicket.StatusCode);
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+		}
+
+		/// <summary>Test for invalid PUT/Update ticket note.</summary>
+		/// <remarks>Ticket Id not found.</remarks>
+		[Fact]
+		public async void Update_InValid_TicketId_NotFound()
+		{
+			// Arrange
+			int knownTicketNoteId = 2;
+			int knownPersonId = 2;
+			int unknownTicketId = 99;
+			TicketNote updateTicketNote = new() { Note = "Updated note", PersonId = knownPersonId, TicketId = unknownTicketId };
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage responsePerson = await client.GetAsync($"/person/{knownPersonId}");
+			HttpResponseMessage responseTicket = await client.GetAsync($"/ticket/{unknownTicketId}");
+			HttpResponseMessage response = await client.PutAsJsonAsync<TicketNote>($"/ticket/note/{knownTicketNoteId}", updateTicketNote);
+
+			// Assert
+			Assert.Equal(HttpStatusCode.OK, responsePerson.StatusCode);
+			Assert.Equal(HttpStatusCode.NotFound, responseTicket.StatusCode);
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+		}
 
 		/// <summary>Test for PUT/Update ticket note.</summary>
-		/// <remarks>Passed In: Valid ticket note identifier (seed expected).<br />
-		///  - Expected response: Status200OK
-		/// </remarks>
+		/// <remarks>Ticket Note Id not found.</remarks>
 		[Fact]
-		public async void UpdateTicketNote_ExistingIdPassed_ResultsOkResult()
+		public async void Update_InValid_TicketNoteId_NotFound()
+		{
+			// Arrange
+			int unknownTicketNoteId = Seed_TicketNotes.DataTicketNote.Count + 99;
+			TicketNote updateTicketNote = new() { Note = "Updated note", PersonId = 0, TicketId = 0 };
+			StringContent? putContent = new(JsonSerializer.Serialize(updateTicketNote), Encoding.UTF8, "application/json");
+
+			// Act
+			HttpClient client = appFixture.Application.CreateClient();
+			HttpResponseMessage response = await client.PutAsync($"/ticket/note/{unknownTicketNoteId}", putContent);
+
+			// Assert
+			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+		}
+
+		/// <summary>Test for valid PUT/Update ticket note.</summary>
+		[Fact]
+		public async void Update_Valid_Ok()
 		{
 			// Arrange
 			int knownTicketNoteId = 2;
@@ -122,9 +354,9 @@
 
 			// Act
 			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? responsePerson = await client.GetAsync($"/person/{knownPersonId}");
-			HttpResponseMessage? responseTicket = await client.GetAsync($"/ticket/{knownTicketNoteId}");
-			HttpResponseMessage? response = await client.PutAsJsonAsync<TicketNote>($"/ticket/note/{knownTicketNoteId}", updateTicketNote);
+			HttpResponseMessage responsePerson = await client.GetAsync($"/person/{knownPersonId}");
+			HttpResponseMessage responseTicket = await client.GetAsync($"/ticket/{knownTicketId}");
+			HttpResponseMessage response = await client.PutAsJsonAsync<TicketNote>($"/ticket/note/{knownTicketNoteId}", updateTicketNote);
 			TicketNote? responseGet = await client.GetFromJsonAsync<TicketNote>($"/ticket/note/{knownTicketNoteId}");
 
 			// Assert
@@ -139,29 +371,6 @@
 			Assert.Equal(updateTicketNote.PersonId, model.PersonId);
 		}
 
-		/// <summary>Test for PUT/Update ticket note.</summary>
-		/// <remarks>Passed In: Invalid/Unknown ticket note identifier (seed expected).<br />
-		///  - Expected response: Status404NotFound
-		///  </remarks>
-		[Fact]
-		public async void UpdateTicketNote_UnknownIdPassed_ResultsNotFoundResult()
-		{
-			// Arrange
-			int unknownId = Seed_TicketNotes.DataTicketNote.Count + 99;
-			TicketNote updateTicketNote = new() { Note = "Updated note", PersonId = 0, TicketId = 0 };
-
-			// Act
-			HttpClient client = appFixture.Application.CreateClient();
-			HttpResponseMessage? response = await client.PutAsync(
-				$"/ticket/note/{unknownId}",
-				new StringContent(
-					JsonSerializer.Serialize(updateTicketNote),
-					Encoding.UTF8,
-					"application/json")
-				);
-
-			// Assert
-			Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-		}
+		#endregion PUT/Update
 	}
 }

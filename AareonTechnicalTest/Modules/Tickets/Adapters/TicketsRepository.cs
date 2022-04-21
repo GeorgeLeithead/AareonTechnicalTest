@@ -62,6 +62,14 @@
 			return db.Tickets.FirstOrDefaultAsync(e => e.Id == id);
 		}
 
+		/// <summary>GET/Get tickets by person identifier.</summary>
+		/// <param name="personId">Person identifier.</param>
+		/// <returns>List of person tickets.</returns>
+		public async Task<List<Ticket>?> ReadByPersonIdAsync(int personId)
+		{
+			return await db.Tickets.Where(e => e.PersonId == personId).ToListAsync();
+		}
+
 		/// <summary>PUT/Update ticket.</summary>
 		/// <param name="ticket">Ticket POCO.</param>
 		/// <returns>Number of records affected.</returns>
