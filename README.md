@@ -103,3 +103,4 @@ Add to the API Program.cs the following to make the implicit Program class publi
 ```csharp
 public partial class Program { }
 ```
+## Auditing
