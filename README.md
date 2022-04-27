@@ -103,4 +103,93 @@ Add to the API Program.cs the following to make the implicit Program class publi
 ```csharp
 public partial class Program { }
 ```
+
+### Using HTTPREPL
+ 1. Run the following .NET Core CLI command in the command shell:
+```bash
+dotnet run
+```
+The preceding command locates the project at the current directory, retrieves and installs any required project dependencies, compliles the project code, and hosts the web API with the ASP.NET Code Kestrel web server at both an HTTP and HTTPS endpoint.
+
+Ports as defined in the project will be selected for HTTP, port 5000, and port 5001 for HTTPS. Ports used during development can be easily changed by editing the project's launchSettings.json file.
+
+A variation of the following output appears to indicate that the app is running:
+
+```cmd
+Building...
+info: AareonTechnicalTest[0]
+	  Starting AareonTechnicalTest 04/27/2022 11:40:19
+info: Microsoft.Hosting.Lifetime[14]
+	  Now listening on: https://localhost:5001
+info: Microsoft.Hosting.Lifetime[14]
+	  Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[0]
+	  Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+	  Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+	  Content root path: ...\AareonTechnicalTest\AareonTechnicalTest\
+```
+2. Ope a new integrated terminal, then run the following command to install the .NET HTTP REPL command-line tool, to use to make HTTP requests to the web API:
+```cmd
+dotnet tool install -g Microsoft.dotnet-httprepl
+```
+3. Connect to the web API by running the following command:
+```cmd
+httprepl https://localhost:5001
+```
+4. Explore the available endpoints by running the following command:
+```cmd
+ls
+```
+The preceding command detects all APIs available on the connected endpoint.  A variation of the following output appears:
+```cmd
+https://localhost:5001/> ls
+.        []
+person   [GET|POST]
+ticket   [GET|POST]
+```
+5. Goto the **person** endpoint by running the following command:
+```cmd
+cd person
+```
+6. make a **GET** request in **HttpRepl** by using the following command:
+```cmd
+get
+```
+The preceeding command makes a **GET** request:
+```json
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Wed, 27 Apr 2022 13:51:07 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+[
+  {
+	"forename": "Paris",
+	"id": 1,
+	"isAdmin": true,
+	"surname": "Hilton",
+	"ticketNotes": [
+	],
+	"tickets": [
+	]
+  },
+  {
+	"forename": "Jack",
+	"id": 2,
+	"isAdmin": false,
+	"surname": "Griffiths",
+	"ticketNotes": [
+	],
+	"tickets": [
+	]
+  },
+]
+```
+
 ## Auditing
+To implement auditing, I looked at adding in AutoHistory.  This however, currently does not work with .NET 6! See the source repository [Issues #73](https://github.com/Arch/AutoHistory/issues/73) for details.
+
+`PM> Install-Package Microsoft.EntityFrameworkCore.AutoHistory`
